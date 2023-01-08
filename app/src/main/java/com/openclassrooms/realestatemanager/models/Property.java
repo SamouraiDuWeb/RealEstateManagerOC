@@ -1,12 +1,21 @@
 package com.openclassrooms.realestatemanager.models;
 
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+@Entity
 public class Property implements Serializable {
 
-    private String id;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    private String category;
 
     private String type;
 
@@ -14,33 +23,77 @@ public class Property implements Serializable {
 
     private float surface;
 
-    private int nbPieces;
+    private int nbRooms;
+
+    private int nbBathrooms;
+
+    private int nbBedrooms;
 
     private String description;
 
-    private List<PropertyPhotos> photos = null;
+    @Embedded
+    private PropertyPhotos photos;
 
+    @Embedded
     private PropertyAddress address;
-
-    private List<InterestPoints> interestPoints;
 
     private String status;
 
+    @Embedded
     private Date dateEntry;
 
+    @Embedded
     private Date dateSold;
 
+    @Embedded
     private User agent;
 
-    public Property(String type, float price, String description, PropertyAddress address, List<PropertyPhotos> photos) {
+    private boolean school;
+
+    private boolean business;
+
+    private boolean park;
+
+    private boolean publicTransport;
+
+    public Property() {
     }
 
+    public Property(long id, String category, String type, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, PropertyPhotos photos, PropertyAddress address, String status, Date dateEntry, Date dateSold, User agent, boolean school, boolean business, boolean park, boolean publicTransport) {
+        this.id = id;
+        this.category = category;
+        this.type = type;
+        this.price = price;
+        this.surface = surface;
+        this.nbRooms = nbRooms;
+        this.nbBathrooms = nbBathrooms;
+        this.nbBedrooms = nbBedrooms;
+        this.description = description;
+        this.photos = photos;
+        this.address = address;
+        this.status = status;
+        this.dateEntry = dateEntry;
+        this.dateSold = dateSold;
+        this.agent = agent;
+        this.school = school;
+        this.business = business;
+        this.park = park;
+        this.publicTransport = publicTransport;
+    }
 
-    public String getId() {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -68,12 +121,28 @@ public class Property implements Serializable {
         this.surface = surface;
     }
 
-    public int getNbPieces() {
-        return nbPieces;
+    public int getNbRooms() {
+        return nbRooms;
     }
 
-    public void setNbPieces(int nbPieces) {
-        this.nbPieces = nbPieces;
+    public void setNbRooms(int nbRooms) {
+        this.nbRooms = nbRooms;
+    }
+
+    public int getNbBathrooms() {
+        return nbBathrooms;
+    }
+
+    public void setNbBathrooms(int nbBathrooms) {
+        this.nbBathrooms = nbBathrooms;
+    }
+
+    public int getNbBedrooms() {
+        return nbBedrooms;
+    }
+
+    public void setNbBedrooms(int nbBedrooms) {
+        this.nbBedrooms = nbBedrooms;
     }
 
     public String getDescription() {
@@ -84,11 +153,11 @@ public class Property implements Serializable {
         this.description = description;
     }
 
-    public List<PropertyPhotos> getPhotos() {
+    public PropertyPhotos getPhotos() {
         return photos;
     }
 
-    public void setPhotos(List<PropertyPhotos> photos) {
+    public void setPhotos(PropertyPhotos photos) {
         this.photos = photos;
     }
 
@@ -98,14 +167,6 @@ public class Property implements Serializable {
 
     public void setAddress(PropertyAddress address) {
         this.address = address;
-    }
-
-    public List<InterestPoints> getInterestPoints() {
-        return interestPoints;
-    }
-
-    public void setInterestPoints(List<InterestPoints> interestPoints) {
-        this.interestPoints = interestPoints;
     }
 
     public String getStatus() {
@@ -138,5 +199,37 @@ public class Property implements Serializable {
 
     public void setAgent(User agent) {
         this.agent = agent;
+    }
+
+    public boolean isSchool() {
+        return school;
+    }
+
+    public void setSchool(boolean school) {
+        this.school = school;
+    }
+
+    public boolean isBusiness() {
+        return business;
+    }
+
+    public void setBusiness(boolean business) {
+        this.business = business;
+    }
+
+    public boolean isPark() {
+        return park;
+    }
+
+    public void setPark(boolean park) {
+        this.park = park;
+    }
+
+    public boolean isPublicTransport() {
+        return publicTransport;
+    }
+
+    public void setPublicTransport(boolean publicTransport) {
+        this.publicTransport = publicTransport;
     }
 }

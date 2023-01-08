@@ -19,7 +19,6 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
         binding = FragmentListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         return root;
