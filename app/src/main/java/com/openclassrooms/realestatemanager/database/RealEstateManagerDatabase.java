@@ -10,6 +10,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
+import com.openclassrooms.realestatemanager.database.dao.PropertyPhotosDao;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 
@@ -31,6 +33,11 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
         }
         return INSTANCE;
     }
+
+    //Dao
+    public abstract PropertyDao propertyDao();
+
+    public abstract PropertyPhotosDao propertyPhotosDao();
 
     private static Callback prepopulateDatabase() {
         return new Callback() {

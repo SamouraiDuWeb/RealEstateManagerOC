@@ -2,10 +2,13 @@ package com.openclassrooms.realestatemanager.models;
 
 import androidx.room.Embedded;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.RoomWarnings;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -16,8 +19,6 @@ public class Property implements Serializable {
     private long id;
 
     private String category;
-
-    private String type;
 
     private float price;
 
@@ -32,7 +33,7 @@ public class Property implements Serializable {
     private String description;
 
     @Embedded
-    private PropertyPhotos photos;
+    private ArrayList<PropertyPhotos> photos;
 
     @Embedded
     private PropertyAddress address;
@@ -59,10 +60,10 @@ public class Property implements Serializable {
     public Property() {
     }
 
-    public Property(long id, String category, String type, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, PropertyPhotos photos, PropertyAddress address, String status, Date dateEntry, Date dateSold, User agent, boolean school, boolean business, boolean park, boolean publicTransport) {
+    @Ignore
+    public Property(long id, String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, ArrayList<PropertyPhotos> photos, PropertyAddress address, String status, Date dateEntry, Date dateSold, User agent, boolean school, boolean business, boolean park, boolean publicTransport) {
         this.id = id;
         this.category = category;
-        this.type = type;
         this.price = price;
         this.surface = surface;
         this.nbRooms = nbRooms;
@@ -95,14 +96,6 @@ public class Property implements Serializable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public float getPrice() {
@@ -153,11 +146,11 @@ public class Property implements Serializable {
         this.description = description;
     }
 
-    public PropertyPhotos getPhotos() {
+    public ArrayList<PropertyPhotos> getPhotos() {
         return photos;
     }
 
-    public void setPhotos(PropertyPhotos photos) {
+    public void setPhotos(ArrayList<PropertyPhotos> photos) {
         this.photos = photos;
     }
 

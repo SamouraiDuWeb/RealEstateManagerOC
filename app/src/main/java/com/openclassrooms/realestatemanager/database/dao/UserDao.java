@@ -28,9 +28,9 @@ public interface UserDao {
             "name = :name," +
             "email= :email," +
             "password= :password WHERE userId = :userId")
-    int updateHouse(long userId, String name,
+    int updateProperty(long userId, String name,
                     String email, String password);
 
     @Query("DELETE FROM User WHERE userId = :userId")
-    int deleteHouse(long userId);
+    int deleteProperty(long userId);
 }

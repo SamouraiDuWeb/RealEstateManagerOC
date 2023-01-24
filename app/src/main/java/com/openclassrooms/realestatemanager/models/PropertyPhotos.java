@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.models;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
@@ -32,6 +33,7 @@ public class PropertyPhotos {
     public PropertyPhotos() {
     }
 
+    @Ignore
     public PropertyPhotos(long photosId, long propertyId, String photoDescription, String photoUrl) {
         this.photosId = photosId;
         this.propertyId = propertyId;

@@ -24,15 +24,15 @@ public interface PropertyDao {
     @Query("SELECT * FROM Property WHERE id = :propertyId")
     LiveData<Property> getProperty(long propertyId);
 
-    @Query("SELECT * FROM Property WHERE id = :houseId")
-    Cursor getPropertyWithCursor(long houseId);
+    @Query("SELECT * FROM Property WHERE id = :propertyId")
+    Cursor getPropertyWithCursor(long propertyId);
 
     @Query("SELECT * FROM Property")
     LiveData<List<Property>> getAll();
 
     @Query("UPDATE Property SET category = :category," +
             "price = :price," +
-            "address = :address," +
+            "surface = :surface," +
             "nbRooms = :numberOfRooms," +
             "nbBathrooms= :numberOfBathrooms," +
             "nbBedrooms = :numberOfBedRooms," +
@@ -41,25 +41,18 @@ public interface PropertyDao {
             "publicTransport = :publicTransport," +
             "park = :park," +
             "description = :description," +
-            "status = :available " +
-            "WHERE id = :id")
-    int updateHouse(String category,
-                    int price,
-                    PropertyAddress address,
-                    int numberOfRooms,
-                    int numberOfBathrooms,
-                    int numberOfBedRooms,
-                    boolean school,
-                    boolean business,
-                    boolean publicTransport,
-                    boolean park,
-                    String description,
-                    boolean available,
-                    long id);
+            "address = :address," +
+            "userId = :agentName WHERE id = :id")
+    int updateProperty(
+            String category, float price,
+                       float surface, int numberOfRooms, int numberOfBathrooms,
+                       int numberOfBedRooms, boolean school, boolean business,
+                       boolean publicTransport, boolean park, String address,
+                       String description, long id, String agentName);
 
-    @Query("UPDATE Property SET photoUrl = :photos WHERE id =:id") // hum je sais pas
-    int updateIllustration(PropertyPhotos photos, long id);
+    @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
+    int updateGallery(List<String> photos, long id);
 
-    @Query("DELETE FROM Property WHERE id = :houseId")
-    int deleteHouse(long houseId);
+    @Query("DELETE FROM Property WHERE id = :propertyId")
+    int deleteProperty(long propertyId);
 }

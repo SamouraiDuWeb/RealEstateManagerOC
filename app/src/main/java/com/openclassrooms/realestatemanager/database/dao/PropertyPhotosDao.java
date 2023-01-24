@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database.dao;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -8,6 +9,7 @@ import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 
 import java.util.List;
 
+@Dao
 public interface PropertyPhotosDao {
 
     @Insert

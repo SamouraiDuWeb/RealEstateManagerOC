@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="list_categories">
+        <item>Selectionnez une categorie</item>
+        <item>Maison individuelle</item>
+        <item>Maison mitoyenne ou maison en rangée</item>
+        <item>Duplex ou immeuble à plusieurs unités</item>
+        <item>Appartement ou condominium</item>
+        <item>Terrain vacant</item>
+        <item>Propriété commerciale</item>
+        <item>Propriété industrielle</item>
+        <item>Propriété à usage mixte</item>
+        <item>Terre agricole ou ranch</item>
+        <item>Propriété de loisirs</item>
+    </string-array>
+</resources>
