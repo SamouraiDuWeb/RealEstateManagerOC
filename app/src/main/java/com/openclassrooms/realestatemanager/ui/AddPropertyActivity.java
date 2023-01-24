@@ -1,11 +1,17 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -46,13 +52,20 @@ public class AddPropertyActivity extends AppCompatActivity {
     private Button btnAddphoto;
     private LinearLayout llGallery;
 
-    private String category, address, streetNumber, streetName, zipCode, city;
+    private String category, address, streetNumber, streetName, zipCode, city, description;
+
+    private float surface, price;
+
+    private int nbRooms, nbBathRooms, nbBedRooms;
+
+    private boolean school, business, park, publicTransport;
 
     private List<PropertyPhotos> gallery;
 
     private boolean isInternetUp = true;
 
     private RealEstateManagerViewModel realEstateManagerViewModel;
+    private int GALLERY_REQUEST_CODE = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +91,44 @@ public class AddPropertyActivity extends AppCompatActivity {
         System.out.println("/// " + isInternetUp);
 
         initInputs();
+        addPhoto();
+    }
+
+    private void addPhoto() {
+        btnAddphoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create a dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(AddPropertyActivity.this);
+                builder.setTitle("Add Photo");
+                builder.setMessage("Select a source to add photo");
+
+                // Set the positive button to open the gallery
+                builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Open the gallery
+                        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                    }
+                });
+                builder.create().show();
+            }
+        });
+    }
+
+    private void getUserInputs() {
+        category = spCategory.getSelectedItem().toString();
+        surface = Float.parseFloat(etSurface.getText().toString());
+        price = Float.parseFloat(etPrix.getText().toString());
+        nbRooms = Integer.parseInt(etRooms.getText().toString());
+        nbBathRooms = Integer.parseInt(etBathrooms.getText().toString());
+        nbBedRooms = Integer.parseInt(etBedRooms.getText().toString());
+        school = cbSchool.isChecked();
+        business = cbBusiness.isChecked();
+        park = cbParks.isChecked();
+        publicTransport = cbPublicTransports.isChecked();
+        description = etDescription.getText().toString();
     }
 
     private void initInputs() {
@@ -92,7 +143,10 @@ public class AddPropertyActivity extends AppCompatActivity {
         cbSchool = binding.cbAddPropertySchool;
         cbParks = binding.cbAddPropertyPark;
         cbPublicTransports = binding.cbAddPropertyPublicTransport;
+        btnAddphoto = binding.btnAddActivityAddPhoto;
     }
+
+
 
 
     private void setToolbar() {
@@ -109,13 +163,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                 getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setCountry("FR");
         autocompleteFragment.setHint("Recherche");
-        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS,Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
                 // do something with the selected place
                 List<AddressComponent> addressComponents = place.getAddressComponents().asList();
-
+                autocompleteFragment.setText("" + addressComponents);
                 // Iterate through the list of address components
                 for (AddressComponent addressComponent : addressComponents) {
                     // Check if the address component is a street number
@@ -135,6 +189,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         city = addressComponent.getShortName();
                     }
                 }
+                address = "" + streetNumber + " " + streetName + " " + zipCode + " " + city;
             }
 
             @Override
@@ -144,11 +199,18 @@ public class AddPropertyActivity extends AppCompatActivity {
         });
     }
 
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if(requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+//            Uri selectedImage = data.getData();
+//            // Do something with the selected image (e.g. display it in an ImageView)
+//        }
+//    }
+
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.realEstateManagerViewModel = new ViewModelProvider(this, viewModelFactory).get(RealEstateManagerViewModel.class);
         this.realEstateManagerViewModel.init(HOUSE_ID);
     }
-
-
 }
