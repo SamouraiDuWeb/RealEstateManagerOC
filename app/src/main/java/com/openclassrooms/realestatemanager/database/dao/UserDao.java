@@ -3,6 +3,7 @@ package com.openclassrooms.realestatemanager.database.dao;
 import android.database.Cursor;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -13,6 +14,7 @@ import com.openclassrooms.realestatemanager.models.User;
 
 import java.util.List;
 
+@Dao
 public interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

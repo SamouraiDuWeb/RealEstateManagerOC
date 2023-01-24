@@ -1,5 +1,6 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.MainActivity;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
+import com.openclassrooms.realestatemanager.models.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     private LoginActivity binding;
 
     private FirebaseUser user;
+
+    private User userToCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,12 +74,17 @@ public class LoginActivity extends AppCompatActivity {
             }
     );
 
+    @SuppressLint("RestrictedApi")
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             user = FirebaseAuth.getInstance().getCurrentUser();
             System.out.println(response);
+            userToCreate = new User();
+            userToCreate.setEmail(user.getEmail());
+            userToCreate.setName(user.getDisplayName());
+            userToCreate.setUserId(Long.parseLong(user.getProviderId()));
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the

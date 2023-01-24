@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -30,15 +31,21 @@ import com.google.android.libraries.places.api.model.AddressComponent;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.models.User;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class AddPropertyActivity extends AppCompatActivity {
@@ -52,17 +59,15 @@ public class AddPropertyActivity extends AppCompatActivity {
     private Button btnAddphoto;
     private LinearLayout llGallery;
 
-    private String category, address, streetNumber, streetName, zipCode, city, description;
-
+    private String category, address, streetNumber, streetName, zipCode, city, description, dateOfEntry, dateSold;
     private float surface, price;
-
     private int nbRooms, nbBathRooms, nbBedRooms;
-
     private boolean school, business, park, publicTransport;
-
     private List<PropertyPhotos> gallery;
-
     private boolean isInternetUp = true;
+
+    private FirebaseUser user;
+    private String propertyUserName;
 
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private int GALLERY_REQUEST_CODE = 101;
@@ -92,6 +97,11 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         initInputs();
         addPhoto();
+        verifyInputs();
+    }
+
+    private void verifyInputs() {
+
     }
 
     private void addPhoto() {
@@ -119,16 +129,49 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private void getUserInputs() {
         category = spCategory.getSelectedItem().toString();
-        surface = Float.parseFloat(etSurface.getText().toString());
-        price = Float.parseFloat(etPrix.getText().toString());
-        nbRooms = Integer.parseInt(etRooms.getText().toString());
-        nbBathRooms = Integer.parseInt(etBathrooms.getText().toString());
-        nbBedRooms = Integer.parseInt(etBedRooms.getText().toString());
+
+        String strArea = etSurface.getText().toString();
+        if (!TextUtils.isEmpty(strArea)) {
+            surface = Integer.parseInt(strArea);
+        }
+
+        String strPrice = etPrix.getText().toString();
+        if (!TextUtils.isEmpty(strPrice)) {
+            price = Integer.parseInt(strPrice);
+        }
+
+        String strNumberOfRooms = etRooms.getText().toString();
+        if (!TextUtils.isEmpty(strNumberOfRooms)) {
+            nbRooms = Integer.parseInt(strNumberOfRooms);
+        }
+
+        String strNumberOfBedRooms = etBedRooms.getText().toString();
+        if (!TextUtils.isEmpty(strNumberOfBedRooms)) {
+            nbBedRooms = Integer.parseInt(strNumberOfBedRooms);
+        }
+
+        String strNumberOfBathrooms = etBathrooms.getText().toString();
+        if (!TextUtils.isEmpty(strNumberOfBathrooms)) {
+            nbBathRooms = Integer.parseInt(strNumberOfBathrooms);
+        }
+
         school = cbSchool.isChecked();
+
         business = cbBusiness.isChecked();
+
         park = cbParks.isChecked();
+
         publicTransport = cbPublicTransports.isChecked();
+
         description = etDescription.getText().toString();
+
+        Date date = Calendar.getInstance().getTime();
+        dateOfEntry = new SimpleDateFormat("dd-MM-yyyy").format(date);
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            propertyUserName = user.getDisplayName().toString();
+        }
     }
 
     private void initInputs() {
@@ -199,14 +242,14 @@ public class AddPropertyActivity extends AppCompatActivity {
         });
     }
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if(requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
-//            Uri selectedImage = data.getData();
-//            // Do something with the selected image (e.g. display it in an ImageView)
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            // Do something with the selected image (e.g. display it in an ImageView)
+        }
+    }
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
