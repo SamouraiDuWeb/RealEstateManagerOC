@@ -34,8 +34,7 @@ public class PropertyPhotos {
     }
 
     @Ignore
-    public PropertyPhotos(long photosId, long propertyId, String photoDescription, String photoUrl) {
-        this.photosId = photosId;
+    public PropertyPhotos(long propertyId, String photoDescription, String photoUrl) {
         this.propertyId = propertyId;
         this.photoDescription = photoDescription;
         this.photoUrl = photoUrl;

@@ -64,7 +64,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 propertyOne.put("available", "disponible");
                 propertyOne.put("dateOfEntry", "20/01/2021");
                 propertyOne.put("dateOfSale", "null");
-                propertyOne.put("realEstateAgent", "");
+                propertyOne.put("agentName", "");
 
                 db.insert("Property", OnConflictStrategy.IGNORE, propertyOne);
             }

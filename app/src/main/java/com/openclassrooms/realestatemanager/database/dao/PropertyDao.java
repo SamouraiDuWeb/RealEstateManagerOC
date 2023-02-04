@@ -42,17 +42,18 @@ public interface PropertyDao {
             "park = :park," +
             "description = :description," +
             "address = :address," +
-            "userId = :agentName WHERE id = :id")
+            "agentName = :agentName")
     int updateProperty(
             String category, float price,
                        float surface, int numberOfRooms, int numberOfBathrooms,
                        int numberOfBedRooms, boolean school, boolean business,
                        boolean publicTransport, boolean park, String address,
-                       String description, long id, String agentName);
+                       String description, String agentName);
 
     @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
     int updateGallery(List<String> photos, long id);
 
     @Query("DELETE FROM Property WHERE id = :propertyId")
     int deleteProperty(long propertyId);
+
 }

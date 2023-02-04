@@ -46,8 +46,7 @@ public class Property implements Serializable {
     @Embedded
     private Date dateSold;
 
-    @Embedded
-    private User agent;
+    private String agentName;
 
     private boolean school;
 
@@ -61,8 +60,7 @@ public class Property implements Serializable {
     }
 
     @Ignore
-    public Property(long id, String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, ArrayList<PropertyPhotos> photos, PropertyAddress address, String status, Date dateEntry, Date dateSold, User agent, boolean school, boolean business, boolean park, boolean publicTransport) {
-        this.id = id;
+    public Property(String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, Date dateEntry, Date dateSold, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
         this.category = category;
         this.price = price;
         this.surface = surface;
@@ -70,12 +68,10 @@ public class Property implements Serializable {
         this.nbBathrooms = nbBathrooms;
         this.nbBedrooms = nbBedrooms;
         this.description = description;
-        this.photos = photos;
-        this.address = address;
         this.status = status;
         this.dateEntry = dateEntry;
         this.dateSold = dateSold;
-        this.agent = agent;
+        this.agentName = agentName;
         this.school = school;
         this.business = business;
         this.park = park;
@@ -186,12 +182,12 @@ public class Property implements Serializable {
         this.dateSold = dateSold;
     }
 
-    public User getAgent() {
-        return agent;
+    public String getAgentName() {
+        return agentName;
     }
 
-    public void setAgent(User agent) {
-        this.agent = agent;
+    public void setAgentName(String agentName) {
+        this.agentName = agentName;
     }
 
     public boolean isSchool() {

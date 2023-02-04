@@ -42,7 +42,6 @@ public class PropertyDataRepository {
 
     //Update property
     public void updateProperty(
-            long id,
             String category,
             float price,
             float surface,
@@ -61,6 +60,6 @@ public class PropertyDataRepository {
         surface, nbRooms, nbBathrooms,
         nbBedrooms, school, business,
         publicTransport, park, address,
-                description, id, agentName);
+                description, agentName);
     }
 }
