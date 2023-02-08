@@ -50,21 +50,6 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
                 propertyOne.put("id", 1);
                 propertyOne.put("category", "Maison");
-                propertyOne.put("price", 900000);
-                propertyOne.put("numberOfRooms", 8);
-                propertyOne.put("numberOfBathrooms", 4);
-                propertyOne.put("numberOfBedrooms", 4);
-                propertyOne.put("school", false);
-                propertyOne.put("shopping", false);
-                propertyOne.put("publicTransport", true);
-                propertyOne.put("swimmingPool", true);
-                propertyOne.put("description", "Maison individuelle 170 m² Carrez sur parcelle de 800 m². Orientée sud/ouest, sans vis-à-vis, dans quartier résidentiel très calme. Proche de toutes commodités : commerces, écoles, collège, gare SCNF… sont accessibles à pied (pas plus de 10 min).");
-                propertyOne.put("propertyPhotos", "");
-                propertyOne.put("address", "15 route de Hourton, 33160 Saint-Aubin-de-Médoc");
-                propertyOne.put("available", "disponible");
-                propertyOne.put("dateOfEntry", "20/01/2021");
-                propertyOne.put("dateOfSale", "null");
-                propertyOne.put("agentName", "");
 
                 db.insert("Property", OnConflictStrategy.IGNORE, propertyOne);
             }

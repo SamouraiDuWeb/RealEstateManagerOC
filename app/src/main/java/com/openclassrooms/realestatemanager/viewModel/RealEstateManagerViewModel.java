@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.viewModel.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.viewModel.repositories.PropertyPhotosDataRepository;
 
+import java.util.List;
 import java.util.concurrent.Executor;
 
 public class RealEstateManagerViewModel extends ViewModel {
@@ -38,4 +39,6 @@ public class RealEstateManagerViewModel extends ViewModel {
             propertyDataSource.createProperty(property);
         });
     }
+
+    public LiveData<List<Property>> getAll() { return propertyDataSource.getAll(); }
 }

@@ -33,18 +33,15 @@ public class Property implements Serializable {
     private String description;
 
     @Embedded
-    private ArrayList<PropertyPhotos> photos;
-
-    @Embedded
     private PropertyAddress address;
 
     private String status;
 
-    @Embedded
-    private Date dateEntry;
-
-    @Embedded
-    private Date dateSold;
+//    @Embedded
+//    private Date dateEntry;
+//
+//    @Embedded
+//    private Date dateSold;
 
     private String agentName;
 
@@ -60,7 +57,7 @@ public class Property implements Serializable {
     }
 
     @Ignore
-    public Property(String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, Date dateEntry, Date dateSold, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
+    public Property(String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
         this.category = category;
         this.price = price;
         this.surface = surface;
@@ -69,13 +66,16 @@ public class Property implements Serializable {
         this.nbBedrooms = nbBedrooms;
         this.description = description;
         this.status = status;
-        this.dateEntry = dateEntry;
-        this.dateSold = dateSold;
+//        this.dateEntry = dateEntry;
+//        this.dateSold = dateSold;
         this.agentName = agentName;
         this.school = school;
         this.business = business;
         this.park = park;
         this.publicTransport = publicTransport;
+    }
+
+    public Property(String category, float price, float surface, int nbRooms, int nbBathRooms, int nbBedRooms, String description, String disponible, Date date, Date date1, String displayName, boolean school, boolean business, boolean park, boolean publicTransport) {
     }
 
     public String getCategory() {
@@ -142,14 +142,6 @@ public class Property implements Serializable {
         this.description = description;
     }
 
-    public ArrayList<PropertyPhotos> getPhotos() {
-        return photos;
-    }
-
-    public void setPhotos(ArrayList<PropertyPhotos> photos) {
-        this.photos = photos;
-    }
-
     public PropertyAddress getAddress() {
         return address;
     }
@@ -166,21 +158,21 @@ public class Property implements Serializable {
         this.status = status;
     }
 
-    public Date getDateEntry() {
-        return dateEntry;
-    }
-
-    public void setDateEntry(Date dateEntry) {
-        this.dateEntry = dateEntry;
-    }
-
-    public Date getDateSold() {
-        return dateSold;
-    }
-
-    public void setDateSold(Date dateSold) {
-        this.dateSold = dateSold;
-    }
+//    public Date getDateEntry() {
+//        return dateEntry;
+//    }
+//
+//    public void setDateEntry(Date dateEntry) {
+//        this.dateEntry = dateEntry;
+//    }
+//
+//    public Date getDateSold() {
+//        return dateSold;
+//    }
+//
+//    public void setDateSold(Date dateSold) {
+//        this.dateSold = dateSold;
+//    }
 
     public String getAgentName() {
         return agentName;

@@ -23,18 +23,17 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCrqJLy46KdQ7fp3LH8IJZaFW2tAM2bAIM" />
+            android:value="AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw" />
 
-        <activity
-            android:name="com.openclassrooms.realestatemanager.MainActivity"
-            android:exported="true" >
+        <activity android:name=".ui.AddPropertyActivity" />
+        <activity android:name=".ui.ListActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AddPropertyActivity" />
         <activity android:name=".ui.LoginActivity" />
     </application>
 

@@ -3,23 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation.xml"
-    app:startDestination="@id/navigation_map">
-
-    <fragment
-        android:id="@+id/navigation_map"
-        android:name="com.openclassrooms.realestatemanager.ui.MapFragment"
-        android:label="Map"
-        tools:layout="@layout/fragment_map" />
+    app:startDestination="@id/navigation_list">
 
     <fragment
         android:id="@+id/navigation_list"
-        android:name="com.openclassrooms.realestatemanager.ui.ListFragment"
+        android:name="com.openclassrooms.realestatemanager.ui.ListActivity"
         android:label="ListView"
         tools:layout="@layout/fragment_list" />
 
-    <fragment
-        android:id="@+id/navigation_profile"
-        android:name="com.openclassrooms.realestatemanager.ui.ProfileFragment"
-        android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
 </navigation>

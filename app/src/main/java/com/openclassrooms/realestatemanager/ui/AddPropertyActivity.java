@@ -41,6 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AddressComponent;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -117,22 +118,24 @@ public class AddPropertyActivity extends AppCompatActivity {
         configureViewModel();
         setToolbar();
 
-        Places.initialize(getApplicationContext(), "AIzaSyCrqJLy46KdQ7fp3LH8IJZaFW2tAM2bAIM");
+        Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
 
         isInternetUp = Utils.isInternetAvailable(this);
 
-        if (isInternetUp) {
-            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
-        } else {
-            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
-            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
-        }
         System.out.println("/// " + isInternetUp);
 
+        initPlaceApi();
         initInputs();
         addPhoto();
         addProperty();
 //        showSelectedImages();
+    }
+
+    private void initPlaceApi() {
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
+        // Create a new PlacesClient instance
+        PlacesClient placesClient = Places.createClient(this);
     }
 
     private void showSelectedImages() {
@@ -149,10 +152,23 @@ public class AddPropertyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 getUserInputs();
                 if (verifyInputs()) {
-//                    propertyToAdd = new Property(category, price, surface, nbRooms, nbBathRooms, nbBedRooms, description, "disponible", new Date(System.currentTimeMillis()), new Date(), user.getDisplayName(), school, business, park, publicTransport);
-                    propertyTest = new Property();
-
+//                    propertyToAdd = new Property(category, price, surface, nbRooms, nbBathRooms, nbBedRooms, description, "disponible", user.getDisplayName(), school, business, park, publicTransport);
                 }
+                propertyTest = new Property();
+                propertyTest.setCategory(category);
+                propertyTest.setPrice(price);
+                propertyTest.setSurface(surface);
+                propertyTest.setNbRooms(nbRooms);
+                propertyTest.setNbBathrooms(nbBathRooms);
+                propertyTest.setNbBedrooms(nbBedRooms);
+                propertyTest.setDescription(description);
+                propertyTest.setStatus("disponible");
+                propertyTest.setAgentName(user.getDisplayName());
+                propertyTest.setSchool(school);
+                propertyTest.setBusiness(business);
+                propertyTest.setPark(park);
+                propertyTest.setPublicTransport(publicTransport);
+                realEstateManagerViewModel.createProperty(propertyTest);
             }
         });
     }
@@ -260,8 +276,11 @@ public class AddPropertyActivity extends AppCompatActivity {
         zipCode = "";
         city = "";
         if (isInternetUp) {
+            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
             getGoogleAddress();
         } else {
+            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
+            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
             streetNumber = etStreetNumber.getText().toString();
             streetName = etstreetName.getText().toString();
             zipCode = etZipCode.getText().toString();
