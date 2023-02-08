@@ -53,6 +53,7 @@ import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBindi
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.PropertyAddress;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 import com.openclassrooms.realestatemanager.models.User;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
@@ -120,22 +121,25 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
 
-        isInternetUp = Utils.isInternetAvailable(this);
+//        isInternetUp = Utils.isInternetAvailable(this);
+        //test with internet down
+        isInternetUp = false;
+
+        if (isInternetUp) {
+            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
+
+        } else {
+            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
+            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
+        }
 
         System.out.println("/// " + isInternetUp);
+        getGoogleAddress();
 
-        initPlaceApi();
         initInputs();
         addPhoto();
         addProperty();
 //        showSelectedImages();
-    }
-
-    private void initPlaceApi() {
-        // Initialize the SDK
-        Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
-        // Create a new PlacesClient instance
-        PlacesClient placesClient = Places.createClient(this);
     }
 
     private void showSelectedImages() {
@@ -151,31 +155,35 @@ public class AddPropertyActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 getUserInputs();
+                realEstateManagerViewModel.deleteAllProperties();
                 if (verifyInputs()) {
-//                    propertyToAdd = new Property(category, price, surface, nbRooms, nbBathRooms, nbBedRooms, description, "disponible", user.getDisplayName(), school, business, park, publicTransport);
+                    propertyTest = new Property();
+                    propertyTest.setCategory(category);
+                    propertyTest.setPrice(price);
+                    propertyTest.setSurface(surface);
+                    propertyTest.setNbRooms(nbRooms);
+                    propertyTest.setNbBathrooms(nbBathRooms);
+                    propertyTest.setNbBedrooms(nbBedRooms);
+                    propertyTest.setDescription(description);
+                    propertyTest.setStatus("disponible");
+                    propertyTest.setAgentName(user.getDisplayName());
+                    propertyTest.setSchool(school);
+                    propertyTest.setBusiness(business);
+                    propertyTest.setPark(park);
+                    propertyTest.setAddress(address);
+                    propertyTest.setPublicTransport(publicTransport);
+                    realEstateManagerViewModel.createProperty(propertyTest);
+                    System.out.println("/// succes" + propertyTest);
+                    startActivity(new Intent(AddPropertyActivity.this, ListActivity.class));
+
                 }
-                propertyTest = new Property();
-                propertyTest.setCategory(category);
-                propertyTest.setPrice(price);
-                propertyTest.setSurface(surface);
-                propertyTest.setNbRooms(nbRooms);
-                propertyTest.setNbBathrooms(nbBathRooms);
-                propertyTest.setNbBedrooms(nbBedRooms);
-                propertyTest.setDescription(description);
-                propertyTest.setStatus("disponible");
-                propertyTest.setAgentName(user.getDisplayName());
-                propertyTest.setSchool(school);
-                propertyTest.setBusiness(business);
-                propertyTest.setPark(park);
-                propertyTest.setPublicTransport(publicTransport);
-                realEstateManagerViewModel.createProperty(propertyTest);
             }
         });
     }
 
     private boolean verifyInputs() {
         Boolean isOk;
-        if (category.isEmpty()) {
+        if (category.isEmpty() || category.equals("Selectionnez une categorie")) {
             Toast.makeText(this, "Veuillez indiquer la catégorie du bien", Toast.LENGTH_LONG).show();
             isOk = false;
         } else if (Float.toString(surface).isEmpty()) {
@@ -271,22 +279,13 @@ public class AddPropertyActivity extends AppCompatActivity {
             nbBathRooms = Integer.parseInt(strNumberOfBathrooms);
         }
 
-        streetNumber = "";
-        streetName = "";
-        zipCode = "";
-        city = "";
-        if (isInternetUp) {
-            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
-            getGoogleAddress();
-        } else {
-            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
-            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
+        if (!isInternetUp) {
             streetNumber = etStreetNumber.getText().toString();
             streetName = etstreetName.getText().toString();
             zipCode = etZipCode.getText().toString();
             city = etCity.getText().toString();
+            address = "" + streetNumber + " " + streetName + " " + zipCode + " " + city;
         }
-
 
         school = cbSchool.isChecked();
 
@@ -369,6 +368,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                     }
                 }
                 address = "" + streetNumber + " " + streetName + " " + zipCode + " " + city;
+                System.out.println("/// " + address);
             }
 
             @Override
@@ -399,7 +399,6 @@ public class AddPropertyActivity extends AppCompatActivity {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             String photoUrl = getPathFromUri(selectedImage);
-            System.out.println("/// : " + galleryToShow);
             //New dialog to add a description to the image
 //            descriptionDialog();
             photoToAdd = new PropertyPhotos(1, "", photoUrl);

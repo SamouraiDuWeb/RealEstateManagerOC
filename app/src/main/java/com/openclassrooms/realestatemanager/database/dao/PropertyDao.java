@@ -53,7 +53,6 @@ public interface PropertyDao {
     @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
     int updateGallery(List<String> photos, long id);
 
-    @Query("DELETE FROM Property WHERE id = :propertyId")
-    int deleteProperty(long propertyId);
-
+    @Query("DELETE FROM Property")
+    void deleteAllproperties();
 }

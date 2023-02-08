@@ -4,12 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Property;
-import com.openclassrooms.realestatemanager.models.PropertyAddress;
-import com.openclassrooms.realestatemanager.models.PropertyPhotos;
-import com.openclassrooms.realestatemanager.models.User;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PropertyDataRepository {
@@ -23,6 +18,11 @@ public class PropertyDataRepository {
     //Create property
     public void createProperty(Property property) {
         propertyDao.createProperty(property);
+    }
+
+    //Create property
+    public void deleteAllproperties() {
+        propertyDao.deleteAllproperties();
     }
 
     //Get property

@@ -15,7 +15,7 @@ import com.openclassrooms.realestatemanager.database.dao.PropertyPhotosDao;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 
-@Database(entities = {Property.class, PropertyPhotos.class}, version = 1, exportSchema = false)
+@Database(entities = {Property.class, PropertyPhotos.class}, version = 2, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
     private static volatile RealEstateManagerDatabase INSTANCE;
@@ -26,6 +26,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     RealEstateManagerDatabase.class, "MyDatabase.db")
+                            .fallbackToDestructiveMigration()
                             .addCallback(prepopulateDatabase())
                             .build();
                 }

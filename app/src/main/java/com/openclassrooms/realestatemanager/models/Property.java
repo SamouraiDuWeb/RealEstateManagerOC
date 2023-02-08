@@ -32,8 +32,7 @@ public class Property implements Serializable {
 
     private String description;
 
-    @Embedded
-    private PropertyAddress address;
+    private String address;
 
     private String status;
 
@@ -57,8 +56,9 @@ public class Property implements Serializable {
     }
 
     @Ignore
-    public Property(String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
+    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
         this.category = category;
+        this.address = address;
         this.price = price;
         this.surface = surface;
         this.nbRooms = nbRooms;
@@ -66,8 +66,6 @@ public class Property implements Serializable {
         this.nbBedrooms = nbBedrooms;
         this.description = description;
         this.status = status;
-//        this.dateEntry = dateEntry;
-//        this.dateSold = dateSold;
         this.agentName = agentName;
         this.school = school;
         this.business = business;
@@ -142,11 +140,11 @@ public class Property implements Serializable {
         this.description = description;
     }
 
-    public PropertyAddress getAddress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(PropertyAddress address) {
+    public void setAddress(String address) {
         this.address = address;
     }
 

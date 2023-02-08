@@ -40,5 +40,11 @@ public class RealEstateManagerViewModel extends ViewModel {
         });
     }
 
+    public void deleteAllProperties() {
+        executor.execute(() -> {
+            propertyDataSource.deleteAllproperties();
+        });
+    }
+
     public LiveData<List<Property>> getAll() { return propertyDataSource.getAll(); }
 }
