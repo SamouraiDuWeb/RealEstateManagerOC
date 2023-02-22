@@ -339,10 +339,30 @@
                 android:hint="Description"
                 android:inputType="textMultiLine"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_add_property"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_add_activity_description" />
+
+            <TextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Status  :"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_activity_description"/>
+
+            <CheckBox
+                android:id="@+id/cb_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/tv_status"
+                app:layout_constraintTop_toBottomOf="@+id/et_add_activity_description"
+                android:text="Vendu"
+                android:layout_marginStart="8dp"
+                android:textSize="12sp"/>
 
             <Button
                 android:id="@+id/btn_add_property"
@@ -350,6 +370,8 @@
                 android:layout_height="wrap_content"
                 android:text="Ajouter le bien"
                 android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/cb_status"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

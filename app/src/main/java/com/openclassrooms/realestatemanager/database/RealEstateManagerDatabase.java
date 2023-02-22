@@ -12,10 +12,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.database.dao.PropertyPhotosDao;
+import com.openclassrooms.realestatemanager.database.dao.UserDao;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.models.User;
 
-@Database(entities = {Property.class, PropertyPhotos.class}, version = 2, exportSchema = false)
+@Database(entities = {Property.class, PropertyPhotos.class, User.class}, version = 4, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
     private static volatile RealEstateManagerDatabase INSTANCE;
@@ -39,6 +41,8 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
     public abstract PropertyDao propertyDao();
 
     public abstract PropertyPhotosDao propertyPhotosDao();
+
+    public abstract UserDao userDao();
 
     private static Callback prepopulateDatabase() {
         return new Callback() {

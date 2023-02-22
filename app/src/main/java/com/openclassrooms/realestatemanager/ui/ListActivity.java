@@ -1,16 +1,22 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapter.PropertyListAdapter;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
@@ -28,6 +34,8 @@ public class ListActivity extends AppCompatActivity {
     private PropertyListAdapter adapter;
     private RecyclerView rvProperties;
     private FirebaseUser currentUser;
+    private DrawerLayout drawerLayout;
+    private Toolbar toolbar;
 
     private List<Property> propertyList = new ArrayList<Property>();
 
@@ -51,9 +59,24 @@ public class ListActivity extends AppCompatActivity {
         configureViewModel();
         intiRecyclerView();
         setListeners();
+        configureToolBar();
+        configureDrawerLayout();
+    }
+
+    private void configureToolBar() {
+        this.toolbar = findViewById(R.id.toolbar_main);
+        setSupportActionBar(toolbar);
+    }
+
+    private void configureDrawerLayout() {
+        this.drawerLayout = findViewById(R.id.activity_list_drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
     private void setListeners() {
+
         binding.ivSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,7 +97,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     private void intiRecyclerView() {
-        adapter = new PropertyListAdapter(propertyList);
+        adapter = new PropertyListAdapter(propertyList, ListActivity.this);
         rvProperties.setAdapter(adapter);
         rvProperties.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -85,7 +108,6 @@ public class ListActivity extends AppCompatActivity {
         realEstateManagerViewModel.getAll().observe(this, propertyList -> {
             adapter.setData(propertyList);
         });
-
     }
 
 

@@ -15,13 +15,17 @@ public class PropertyPhotosDataRepository {
         this.propertyPhotosDao = propertyPhotosDao;
     }
 
-    //Create illustration
-    public void createIllustration(PropertyPhotos illustration) {
-        propertyPhotosDao.createPropertyPhoto(illustration);
+    //Create propertyPhoto
+    public void createPropertyPhoto(PropertyPhotos propertyPhoto) {
+        propertyPhotosDao.createPropertyPhoto(propertyPhoto);
     }
 
     //Get gallery
     public LiveData<List<PropertyPhotos>> getGallery(long propertyId) {
         return this.propertyPhotosDao.getGallery(propertyId);
+    }
+
+    public LiveData<List<PropertyPhotos>> getAllGallery() {
+        return this.propertyPhotosDao.getAllGallery();
     }
 }

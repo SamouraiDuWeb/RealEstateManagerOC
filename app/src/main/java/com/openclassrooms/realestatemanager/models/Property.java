@@ -36,11 +36,9 @@ public class Property implements Serializable {
 
     private String status;
 
-//    @Embedded
-//    private Date dateEntry;
-//
-//    @Embedded
-//    private Date dateSold;
+    private String dateOfEntry;
+
+    private String dateSold;
 
     private String agentName;
 
@@ -56,7 +54,7 @@ public class Property implements Serializable {
     }
 
     @Ignore
-    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport) {
+    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
         this.category = category;
         this.address = address;
         this.price = price;
@@ -71,9 +69,8 @@ public class Property implements Serializable {
         this.business = business;
         this.park = park;
         this.publicTransport = publicTransport;
-    }
-
-    public Property(String category, float price, float surface, int nbRooms, int nbBathRooms, int nbBedRooms, String description, String disponible, Date date, Date date1, String displayName, boolean school, boolean business, boolean park, boolean publicTransport) {
+        this.dateOfEntry = dateOfEntry;
+        this.dateSold = dateSold;
     }
 
     public String getCategory() {
@@ -210,5 +207,21 @@ public class Property implements Serializable {
 
     public void setPublicTransport(boolean publicTransport) {
         this.publicTransport = publicTransport;
+    }
+
+    public String getDateOfEntry() {
+        return dateOfEntry;
+    }
+
+    public void setDateOfEntry(String dateOfEntry) {
+        this.dateOfEntry = dateOfEntry;
+    }
+
+    public String getDateSold() {
+        return dateSold;
+    }
+
+    public void setDateSold(String dateSold) {
+        this.dateSold = dateSold;
     }
 }

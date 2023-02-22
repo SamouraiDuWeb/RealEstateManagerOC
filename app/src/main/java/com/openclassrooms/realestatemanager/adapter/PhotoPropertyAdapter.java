@@ -81,7 +81,6 @@ public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAda
                 propertyPhotoView.setImageResource(R.drawable.ic_baseline_add_a_photo_24);
             } else {
                 picture = Utils.getPhotoGalleryFromDevice(photos);
-                System.out.println("/// : " + picture);
                 Glide.with(propertyPhotoView.getContext())
                         .load(picture)
                         .centerCrop()

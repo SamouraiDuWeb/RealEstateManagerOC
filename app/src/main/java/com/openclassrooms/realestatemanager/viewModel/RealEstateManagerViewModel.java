@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.models.User;
 import com.openclassrooms.realestatemanager.viewModel.repositories.PropertyDataRepository;
 import com.openclassrooms.realestatemanager.viewModel.repositories.PropertyPhotosDataRepository;
+import com.openclassrooms.realestatemanager.viewModel.repositories.UserDataRepository;
 
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -15,14 +18,16 @@ public class RealEstateManagerViewModel extends ViewModel {
     //Repositories
     private final PropertyDataRepository propertyDataSource;
     private final PropertyPhotosDataRepository propertyPhotosDataSource;
+    private final UserDataRepository userDataSource;
     private final Executor executor;
 
     //Data
     private LiveData<Property> currentProperty;
 
-    public RealEstateManagerViewModel(PropertyDataRepository propertyDataSource, PropertyPhotosDataRepository propertyPhotosDataSource, Executor executor) {
+    public RealEstateManagerViewModel(PropertyDataRepository propertyDataSource, PropertyPhotosDataRepository propertyPhotosDataSource, UserDataRepository userDataSource, Executor executor) {
         this.propertyDataSource = propertyDataSource;
         this.propertyPhotosDataSource = propertyPhotosDataSource;
+        this.userDataSource = userDataSource;
         this.executor = executor;
     }
 
@@ -46,5 +51,40 @@ public class RealEstateManagerViewModel extends ViewModel {
         });
     }
 
+    public void updateProperty(String category, float price, float surface, String  address,
+                               int nbRooms, int nbBathRooms, int nbBedRooms,String  description,String  status,String agentName,
+    boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
+        executor.execute(() -> {
+            propertyDataSource.updateProperty(category, price,surface, address,
+                    nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
+                    school, business, park, publicTransport, dateOfEntry, dateSold);
+        });
+    }
+
+    public LiveData<Property> getProperty(long propertyId) { return  propertyDataSource.getProperty(propertyId); }
+
     public LiveData<List<Property>> getAll() { return propertyDataSource.getAll(); }
+
+    //For user
+    public void createUser(User user) {
+        executor.execute(() -> {
+            userDataSource.createUser(user);
+        });
+    }
+
+    //For propertyPhoto
+    public void createPropertyPhoto(PropertyPhotos propertyPhotos) {
+        executor.execute(() -> {
+            propertyPhotosDataSource.createPropertyPhoto(propertyPhotos);
+            System.out.println("/// photo ajoutée !");
+        });
+    }
+
+    public LiveData<List<PropertyPhotos>> getGallery(long propertyId) {
+        return propertyPhotosDataSource.getGallery(propertyId);
+    }
+
+    public LiveData<List<PropertyPhotos>> getAllGallery() {
+        return propertyPhotosDataSource.getAllGallery();
+    }
 }

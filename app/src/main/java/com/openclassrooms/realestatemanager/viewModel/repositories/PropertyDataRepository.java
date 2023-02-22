@@ -35,31 +35,19 @@ public class PropertyDataRepository {
         return this.propertyDao.getAll();
     }
 
-    //Update illustration for description picture
+    //Update propertyPhoto for description picture
     public void updatePropertyPhotos(List<String> gallery, long id) {
         propertyDao.updateGallery(gallery, id);
     }
 
     //Update property
     public void updateProperty(
-            String category,
-            float price,
-            float surface,
-            int nbRooms,
-            int nbBathrooms,
-            int nbBedrooms,
-            String description,
-            String address,
-            String agentName,
-            boolean school,
-            boolean business,
-            boolean park,
-            boolean publicTransport
+            String category, float price, float surface, String  address,
+            int nbRooms, int nbBathRooms, int nbBedRooms,String  description,String  status,String agentName,
+            boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold
     ) {
-        propertyDao.updateProperty(category, price,
-        surface, nbRooms, nbBathrooms,
-        nbBedrooms, school, business,
-        publicTransport, park, address,
-                description, agentName);
+        propertyDao.updateProperty(category, price,surface, address,
+                nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
+                school, business, park, publicTransport, dateOfEntry, dateSold);
     }
 }

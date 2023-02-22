@@ -24,31 +24,29 @@ public interface PropertyDao {
     @Query("SELECT * FROM Property WHERE id = :propertyId")
     LiveData<Property> getProperty(long propertyId);
 
-    @Query("SELECT * FROM Property WHERE id = :propertyId")
-    Cursor getPropertyWithCursor(long propertyId);
-
     @Query("SELECT * FROM Property")
     LiveData<List<Property>> getAll();
 
     @Query("UPDATE Property SET category = :category," +
             "price = :price," +
             "surface = :surface," +
-            "nbRooms = :numberOfRooms," +
-            "nbBathrooms= :numberOfBathrooms," +
-            "nbBedrooms = :numberOfBedRooms," +
+            "address = :address," +
+            "nbRooms = :nbRooms," +
+            "nbBathrooms= :nbBathRooms," +
+            "nbBedrooms = :nbBedRooms," +
+            "description = :description," +
+            "status = :status," +
+            "agentName = :agentName," +
             "school = :school," +
             "business = :business," +
-            "publicTransport = :publicTransport," +
             "park = :park," +
-            "description = :description," +
-            "address = :address," +
-            "agentName = :agentName")
-    int updateProperty(
-            String category, float price,
-                       float surface, int numberOfRooms, int numberOfBathrooms,
-                       int numberOfBedRooms, boolean school, boolean business,
-                       boolean publicTransport, boolean park, String address,
-                       String description, String agentName);
+            "publicTransport = :publicTransport," +
+            "dateOfEntry = :dateOfEntry," +
+            "dateSold = :dateSold"
+            )
+    int updateProperty(String category, float price, float surface, String  address,
+                       int nbRooms, int nbBathRooms, int nbBedRooms, String  description, String  status, String agentName,
+                       boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold);
 
     @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
     int updateGallery(List<String> photos, long id);

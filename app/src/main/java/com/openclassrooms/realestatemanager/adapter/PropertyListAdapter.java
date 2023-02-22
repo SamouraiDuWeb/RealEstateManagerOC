@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager.adapter;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,15 +14,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.ui.DetailProperty;
+import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapter.ViewHolder>{
 
     private List<Property> propertyList;
+    private Context context;
 
-    public PropertyListAdapter(List<Property> propertyList) {
+    public PropertyListAdapter(List<Property> propertyList, Context context) {
         this.propertyList = propertyList;
+        this.context = context;
     }
 
     @NonNull
@@ -31,8 +39,18 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PropertyListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PropertyListAdapter.ViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        context = holder.itemView.getContext();
         holder.updateProperty(propertyList.get(position));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Property currentProperty = propertyList.get(position);
+                Intent intent = new Intent(context, DetailProperty.class);
+                intent.putExtra("detail property", currentProperty);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -54,6 +72,7 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView propertyPhoto;
         TextView propertyAddress, propertyPrice, propertyName;
+        List<PropertyPhotos> gallery = new ArrayList<>();
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +87,8 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
             propertyName.setText(property.getCategory());
             propertyPrice.setText(String.valueOf((int) property.getPrice()));
             propertyAddress.setText((CharSequence) property.getAddress());
+
+
         }
     }
 }

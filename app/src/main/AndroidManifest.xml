@@ -26,6 +26,7 @@
             android:value="AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw" />
 
         <activity android:name=".ui.AddPropertyActivity" />
+        <activity android:name=".ui.DetailProperty" />
         <activity android:name=".ui.ListActivity"
             android:exported="true">
             <intent-filter>

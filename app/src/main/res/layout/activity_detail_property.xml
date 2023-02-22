@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        android:title="@string/ajouter_un_bien"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleTextColor="@android:color/white">
+
+        <ImageView
+            android:id="@+id/iv_edit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_baseline_edit_24"
+            android:layout_gravity="end"
+            android:layout_margin="16dp"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <HorizontalScrollView
+                android:id="@+id/iv_detail_activity_photo_gallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxHeight="50dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_detail_photos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="150dp"
+                    android:gravity="bottom"
+                    tools:listitem="@layout/item_add_photo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/toolbar" />
+            </HorizontalScrollView>
+
+            <ImageView
+                android:id="@+id/iv_icon_address"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_location_on_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_activity_photo_gallery"
+                app:tint="@color/quantum_black_100" />
+
+            <TextView
+                android:id="@+id/tv_property_address_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Adresse : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_activity_photo_gallery" />
+
+            <TextView
+                android:id="@+id/tv_property_address_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="88 rue de l'exemple 88888 Sample"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_property_address_title" />
+
+            <ImageView
+                android:id="@+id/iv_icon_surface"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_crop_din_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_property_address_text"
+                app:tint="@color/quantum_black_100" />
+
+            <TextView
+                android:id="@+id/tv_detail_surface_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Surface : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_property_address_text" />
+
+            <TextView
+                android:id="@+id/tv_detail_surface_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:text="450m²"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_surface_title" />
+
+            <ImageView
+                android:id="@+id/iv_icon_nb_bedroom"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_single_bed_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_surface_text"
+                app:tint="@color/quantum_black_100" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_bedroom_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Nombre de chambres : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_nb_bedroom"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_surface" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_bedroom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:text="4"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_nb_bedroom_title" />
+
+            <ImageView
+                android:id="@+id/iv_icon_nb_bathroom"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_bathroom_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_nb_bedroom"
+                app:tint="@color/quantum_black_100" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_bathroom_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Nombre de Sdb : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_nb_bedroom"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_nb_bedroom" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_bathroom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:text="2"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_nb_bathroom_title" />
+
+            <ImageView
+                android:id="@+id/iv_icon_nb_room"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_home_24"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_nb_bathroom"
+                app:tint="@color/quantum_black_100" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_room_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Nombre de pièces : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_nb_bedroom"
+                app:layout_constraintTop_toBottomOf="@id/iv_icon_nb_bathroom" />
+
+            <TextView
+                android:id="@+id/tv_detail_nb_room_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:inputType="number"
+                android:text="7"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@id/iv_icon_surface"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_nb_room_title" />
+
+            <ImageView
+                android:id="@+id/mapImageView"
+                android:layout_width="200dp"
+                android:layout_height="180dp"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_baseline_map_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_detail_surface_title" />
+
+            <TextView
+                android:id="@+id/tv_detail_interest_points_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Points d'intérêt : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mapImageView"
+                app:layout_goneMarginStart="8dp" />
+
+            <LinearLayout
+                android:id="@+id/tv_detail_interest_points_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_interest_points_title"
+                app:layout_goneMarginStart="8dp">
+
+                <LinearLayout
+                    android:id="@+id/ll_school"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_school"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_baseline_check_box_24"
+                        app:tint="@color/quantum_black_100" />
+
+                    <TextView
+                        android:id="@+id/tv_school"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:text="École"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_business"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_business"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_baseline_check_box_24"
+                        app:tint="@color/quantum_black_100" />
+
+                    <TextView
+                        android:id="@+id/tv_business"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:text="Commerces"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_parks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_parks"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_baseline_check_box_24"
+                        app:tint="@color/quantum_black_100" />
+
+                    <TextView
+                        android:id="@+id/tv_parks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:text="Parcs"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_public_transports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/iv_public_transports"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:src="@drawable/ic_baseline_check_box_24"
+                        app:tint="@color/quantum_black_100" />
+
+                    <TextView
+                        android:id="@+id/tv_public_transports"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="12dp"
+                        android:text="Transports publique"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_detail_description_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Description : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_interest_points_text"
+                app:layout_goneMarginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tv_detail_description_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Description details"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_description_title" />
+
+            <TextView
+                android:id="@+id/tv_detail_agent_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Agent : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_description_text"
+                app:layout_goneMarginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tv_detail_agent_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="John Doe"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_agent_title"
+                app:layout_goneMarginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tv_detail_date_entry_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Date de mise en vente : "
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_agent_name"
+                app:layout_goneMarginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tv_detail_date_entry_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="88/88/8888"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_date_entry_title"
+                app:layout_goneMarginStart="8dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
