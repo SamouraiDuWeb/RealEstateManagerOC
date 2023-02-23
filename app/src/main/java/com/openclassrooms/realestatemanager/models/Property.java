@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.models;
 
+import android.content.ContentValues;
+
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -223,5 +225,30 @@ public class Property implements Serializable {
 
     public void setDateSold(String dateSold) {
         this.dateSold = dateSold;
+    }
+
+
+    //Utils
+    public static Property fromContentValues(ContentValues values) {
+        final Property property = new Property();
+        if (values.containsKey("category")) property.setCategory(values.getAsString("category"));
+        if (values.containsKey("address")) property.setAddress(values.getAsString("address"));
+        if (values.containsKey("price")) property.setPrice(values.getAsFloat("price"));
+        if (values.containsKey("surface")) property.setSurface(values.getAsFloat("surface"));
+        if (values.containsKey("numberOfRooms")) property.setNbRooms(values.getAsInteger("numberOfRooms"));
+        if (values.containsKey("numberOfBathrooms")) property.setNbBathrooms(values.getAsInteger("numberOfBathrooms"));
+        if (values.containsKey("numberOfBedrooms")) property.setNbBedrooms(values.getAsInteger("numberOfBedrooms"));
+        if (values.containsKey("description")) property.setDescription(values.getAsString("description"));
+        if (values.containsKey("status")) property.setStatus(values.getAsString("status"));
+        if (values.containsKey("agentName")) property.setStatus(values.getAsString("agentName"));
+        if (values.containsKey("school")) property.setSchool(values.getAsBoolean("school"));
+        if (values.containsKey("business")) property.setBusiness(values.getAsBoolean("business"));
+        if (values.containsKey("park")) property.setPark(values.getAsBoolean("park"));
+        if (values.containsKey("publicTransport")) property.setPublicTransport(values.getAsBoolean("publicTransport"));
+        if (values.containsKey("dateOfEntry")) property.setDateOfEntry(values.getAsString("dateOfEntry"));
+        if (values.containsKey("dateSold")) property.setDateSold(values.getAsString("dateSold"));
+        if (values.containsKey("id")) property.setId(values.getAsLong("id"));
+
+        return property;
     }
 }

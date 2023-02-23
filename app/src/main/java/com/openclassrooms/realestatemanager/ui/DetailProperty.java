@@ -69,19 +69,39 @@ public class DetailProperty extends AppCompatActivity {
         boolean business = property.isBusiness();
         boolean parks = property.isPark();
         boolean publicTransport = property.isPublicTransport();
+        String description = property.getDescription();
         if (!school) {
             System.out.println("/// pas d'écoles a proximité");
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llSchool.getLayoutParams();
             params.width = (int) (0);
             llSchool.setLayoutParams(params);
         }
-
+        if (!business) {
+            System.out.println("/// pas d'écoles a proximité");
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llBusiness.getLayoutParams();
+            params.width = (int) (0);
+            llBusiness.setLayoutParams(params);
+        }
+        if (!parks) {
+            System.out.println("/// pas d'écoles a proximité");
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llParks.getLayoutParams();
+            params.width = (int) (0);
+            llParks.setLayoutParams(params);
+        }
+        if (!publicTransport) {
+            System.out.println("/// pas d'écoles a proximité");
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llPublicTransports.getLayoutParams();
+            params.width = (int) (0);
+            llPublicTransports.setLayoutParams(params);
+        }
 
         //set inputs
         tvAddress.setText(property.getAddress());
         tvSurface.setText(address);
         tvNbRooms.setText(nbRooms);
         tvNbBathrooms.setText(nbBathrooms);
+        tvNbBedrooms.setText(nbBedrooms);
+        tvDescription.setText(description);
         getGalleryPropertyFromDatabase(property.getId());
 
     }

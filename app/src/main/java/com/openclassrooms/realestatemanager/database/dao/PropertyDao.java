@@ -42,15 +42,22 @@ public interface PropertyDao {
             "park = :park," +
             "publicTransport = :publicTransport," +
             "dateOfEntry = :dateOfEntry," +
-            "dateSold = :dateSold"
+            "dateSold = :dateSold," +
+            "id = :id"
             )
-    int updateProperty(String category, float price, float surface, String  address,
-                       int nbRooms, int nbBathRooms, int nbBedRooms, String  description, String  status, String agentName,
-                       boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold);
+    int updateProperty(String category, float price, float surface, String address,
+                       int nbRooms, int nbBathRooms, int nbBedRooms, String description, String status, String agentName,
+                       boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long id);
 
     @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
     int updateGallery(List<String> photos, long id);
 
     @Query("DELETE FROM Property")
     void deleteAllproperties();
+
+    @Query("SELECT * FROM Property WHERE id = :propertyId")
+    Cursor getPropertiesWithCursor(long propertyId);
+
+    @Query("DELETE FROM Property WHERE id = :propertyId")
+    int deleteProperty(long propertyId);
 }

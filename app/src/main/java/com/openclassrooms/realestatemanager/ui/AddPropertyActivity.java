@@ -67,7 +67,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private LinearLayout llGallery;
     private CheckBox cbStatus;
 
-    private String category, address, streetNumber, streetName, zipCode, city, description, dateOfEntry, dateSold, status;
+    private String category, address, streetNumber, streetName, zipCode, city, description, dateOfEntry, dateSold, status = "disponible";
     private float surface = 0, price = 0;
     private int nbRooms = 0, nbBathRooms = 0, nbBedRooms = 0;
     private boolean school, business, park, publicTransport;
@@ -162,7 +162,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         final String adresse = property.getAddress() + "\n";
         Pattern pattern = Pattern.compile("(\\d{1,4}\\s)" +
                 "(([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\\s)*)" +
-                "(\\d{5}\\s)" +
+                "(\\d{1,5}\\s)" +
                 "([a-zA-Z-éÉèÈàÀùÙâÂêÊîÎôÔûÛïÏëËüÜçÇæœ'.]*\\s)");
         System.out.println("/// " + adresse);
         Matcher matcher = pattern.matcher(adresse);
@@ -178,7 +178,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         etRooms.setText(String.valueOf(property.getNbRooms()));
         etBathrooms.setText(String.valueOf(property.getNbBathrooms()));
         etBedRooms.setText(String.valueOf(property.getNbBedrooms()));
-        cbParks.setChecked(property.isSchool());
+        cbSchool.setChecked(property.isSchool());
         cbBusiness.setChecked(property.isBusiness());
         cbParks.setChecked(property.isPark());
         cbPublicTransports.setChecked(property.isPublicTransport());
@@ -224,9 +224,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                         finish();
                     }
                 } else {
+                    getUserInputs();
                     if (verifyInputs()) {
                         addPhotos(id);
                         updateProperty(propertyToEdit);
+                        System.out.println("/// success update" + propertyTest);
+                        startActivity(new Intent(AddPropertyActivity.this, ListActivity.class));
+                        finish();
                     }
                 }
             }
@@ -234,20 +238,15 @@ public class AddPropertyActivity extends AppCompatActivity {
     }
 
     private void updateProperty(Property property) {
-        getUserInputs();
         if(cbStatus.isChecked()) {
             Date date = Calendar.getInstance().getTime();
             dateSold = new SimpleDateFormat("dd-MM-yyyy").format(date);
             status = "Vendu";
         }
-        Property propertyUpTodate = new Property(category, price,surface, address,
-                nbRooms, nbBathRooms, nbBedRooms, description, status, user.getDisplayName(),
-                school, business, park, publicTransport, dateOfEntry, dateSold);
-
 
         realEstateManagerViewModel.updateProperty(category, price,surface, address,
                 nbRooms, nbBathRooms, nbBedRooms, description, status, user.getDisplayName(),
-                school, business, park, publicTransport, dateOfEntry, dateSold);
+                school, business, park, publicTransport, dateOfEntry, dateSold, id);
     }
 
     private void addPhotos(long propertyId) {
