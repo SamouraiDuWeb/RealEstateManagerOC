@@ -50,4 +50,8 @@ public class PropertyDataRepository {
                 nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
                 school, business, park, publicTransport, dateOfEntry, dateSold, id);
     }
+
+    public void deleteProperty(long propertyId) {
+        propertyDao.deleteProperty(propertyId);
+    }
 }

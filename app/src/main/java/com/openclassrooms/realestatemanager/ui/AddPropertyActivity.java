@@ -18,6 +18,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -112,6 +113,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         configureViewModel();
         setToolbar();
+        initInputs();
 
         Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
 
@@ -128,6 +130,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         } else {
             getCurrentProperty(id);
             binding.btnAddProperty.setText("Modifier le bien");
+            initImages(id);
         }
 
 //        isInternetUp = Utils.isInternetAvailable(this);
@@ -145,10 +148,18 @@ public class AddPropertyActivity extends AppCompatActivity {
         System.out.println("/// " + isInternetUp);
         getGoogleAddress();
 
-        initInputs();
         addPhoto();
         addProperty();
 //        showSelectedImages();
+    }
+
+    private void initImages(long id) {
+        adapter = new PhotoPropertyAdapter(galleryToShow, this);
+        rvGallery.setAdapter(adapter);
+        rvGallery.setLayoutManager(new LinearLayoutManager(AddPropertyActivity.this, LinearLayoutManager.HORIZONTAL, false));
+        this.realEstateManagerViewModel.getGallery(id).observe(this, gallery -> {
+            adapter.setData(gallery);
+        });
     }
 
     private void getCurrentProperty(long id) {
@@ -480,38 +491,38 @@ public class AddPropertyActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
             String photoUrl = getPathFromUri(selectedImage);
             //New dialog to add a description to the image
-//            descriptionDialog();
+            descriptionDialog();
             photoToAdd = new PropertyPhotos(1651, "", photoUrl);
             galleryToShow.add(photoToAdd);
             showSelectedImages();
         }
     }
 
-//    private void descriptionDialog() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("Description de l'image");
-//
-//// Set up the input
-//        final EditText input = new EditText(this);
-//        input.setInputType(InputType.TYPE_CLASS_TEXT);
-//        builder.setView(input);
-//
-//// Set up the buttons
-//        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                imageDescription = input.getText().toString();
-//            }
-//        });
-//        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//
-//        builder.show();
-//    }
+    private void descriptionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Description de l'image");
+
+// Set up the input
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+// Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                imageDescription = input.getText().toString();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
 
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);

@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.database.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -21,4 +22,7 @@ public interface PropertyPhotosDao {
 
     @Query("SELECT * FROM PropertyPhotos ")
     LiveData<List<PropertyPhotos>> getAllGallery();
+
+    @Query("DELETE FROM PropertyPhotos WHERE photosId = :id")
+    void deletePropertyPhoto(long id);
 }

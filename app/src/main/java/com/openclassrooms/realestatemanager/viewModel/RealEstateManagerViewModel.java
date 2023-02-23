@@ -61,6 +61,10 @@ public class RealEstateManagerViewModel extends ViewModel {
         });
     }
 
+    public void deleteProperty(long propertyId) {
+        propertyDataSource.deleteProperty(propertyId);
+    }
+
     public LiveData<Property> getProperty(long propertyId) { return  propertyDataSource.getProperty(propertyId); }
 
     public LiveData<List<Property>> getAll() { return propertyDataSource.getAll(); }
@@ -86,5 +90,9 @@ public class RealEstateManagerViewModel extends ViewModel {
 
     public LiveData<List<PropertyPhotos>> getAllGallery() {
         return propertyPhotosDataSource.getAllGallery();
+    }
+
+    public void deletePhotoProperty(long id) {
+        propertyPhotosDataSource.deletePhotoProperty(id);
     }
 }

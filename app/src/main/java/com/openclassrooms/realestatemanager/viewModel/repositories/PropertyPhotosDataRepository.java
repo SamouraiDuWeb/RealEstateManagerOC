@@ -28,4 +28,8 @@ public class PropertyPhotosDataRepository {
     public LiveData<List<PropertyPhotos>> getAllGallery() {
         return this.propertyPhotosDao.getAllGallery();
     }
+
+    public void deletePhotoProperty(long id) {
+        propertyPhotosDao.deletePropertyPhoto(id);
+    }
 }

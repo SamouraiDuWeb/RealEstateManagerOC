@@ -30,6 +30,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                                     RealEstateManagerDatabase.class, "MyDatabase.db")
                             .fallbackToDestructiveMigration()
                             .addCallback(prepopulateDatabase())
+                            .allowMainThreadQueries()
                             .build();
                 }
             }

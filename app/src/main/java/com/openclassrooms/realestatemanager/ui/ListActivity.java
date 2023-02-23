@@ -1,23 +1,26 @@
 package com.openclassrooms.realestatemanager.ui;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapter.PropertyListAdapter;
+import com.openclassrooms.realestatemanager.adapter.SwipeToDeleteCallback;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
@@ -39,6 +42,8 @@ public class ListActivity extends AppCompatActivity {
 
     private List<Property> propertyList = new ArrayList<Property>();
 
+    private SwipeToDeleteCallback swipeToDeleteCallback;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,10 +62,11 @@ public class ListActivity extends AppCompatActivity {
 
         initView();
         configureViewModel();
-        intiRecyclerView();
+        initRecyclerView();
         setListeners();
         configureToolBar();
         configureDrawerLayout();
+        enableSwipeToDeleteAndUndo();
     }
 
     private void configureToolBar() {
@@ -96,7 +102,7 @@ public class ListActivity extends AppCompatActivity {
         rvProperties = binding.rvProperties;
     }
 
-    private void intiRecyclerView() {
+    private void initRecyclerView() {
         adapter = new PropertyListAdapter(propertyList, ListActivity.this);
         rvProperties.setAdapter(adapter);
         rvProperties.setLayoutManager(new LinearLayoutManager(this));
@@ -110,5 +116,37 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
+    private void enableSwipeToDeleteAndUndo() {
+        swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+                final int position = viewHolder.getAdapterPosition();
+                final Property item = adapter.getData().get(position);
+
+                adapter.removeItem(position);
+
+
+                Snackbar snackbar = Snackbar
+                        .make(binding.getRoot(), "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter.restoreItem(item, position);
+                        rvProperties.scrollToPosition(position);
+                    }
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+
+            }
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(rvProperties);
+    }
 
 }

@@ -39,24 +39,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+<!--            <HorizontalScrollView-->
+<!--                android:id="@+id/iv_detail_activity_photo_gallery"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:maxHeight="50dp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent">-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/rv_detail_photos"-->
+<!--                    android:layout_width="0dp"-->
+<!--                    android:layout_height="170dp"-->
+<!--                    android:layout_gravity="bottom"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    tools:listitem="@layout/item_add_photo" />-->
+<!--            </HorizontalScrollView>-->
+
             <HorizontalScrollView
                 android:id="@+id/iv_detail_activity_photo_gallery"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxHeight="50dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_detail_photos"
                     android:layout_width="wrap_content"
-                    android:layout_height="150dp"
-                    android:gravity="bottom"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/toolbar"
-                    tools:listitem="@layout/item_add_photo" />
+                    android:layout_height="170dp"
+                    tools:listitem="@layout/item_add_photo"/>
             </HorizontalScrollView>
 
             <ImageView

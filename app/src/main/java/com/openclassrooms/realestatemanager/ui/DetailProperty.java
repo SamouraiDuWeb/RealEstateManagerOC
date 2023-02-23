@@ -77,19 +77,19 @@ public class DetailProperty extends AppCompatActivity {
             llSchool.setLayoutParams(params);
         }
         if (!business) {
-            System.out.println("/// pas d'écoles a proximité");
+            System.out.println("/// pas de commerces a proximité");
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llBusiness.getLayoutParams();
             params.width = (int) (0);
             llBusiness.setLayoutParams(params);
         }
         if (!parks) {
-            System.out.println("/// pas d'écoles a proximité");
+            System.out.println("/// pas de parcs a proximité");
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llParks.getLayoutParams();
             params.width = (int) (0);
             llParks.setLayoutParams(params);
         }
         if (!publicTransport) {
-            System.out.println("/// pas d'écoles a proximité");
+            System.out.println("/// pas de transports public a proximité");
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llPublicTransports.getLayoutParams();
             params.width = (int) (0);
             llPublicTransports.setLayoutParams(params);
@@ -149,8 +149,8 @@ public class DetailProperty extends AppCompatActivity {
     private void getGalleryPropertyFromDatabase(long propertyId) {
         adapter = new PhotoPropertyAdapter(gallery, this);
         rvPropertyPhotos.setAdapter(adapter);
-        rvPropertyPhotos.setLayoutManager(new LinearLayoutManager(this));
-        this.realEstateManagerViewModel.getAllGallery().observe(this, gallery -> {
+        rvPropertyPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
+        this.realEstateManagerViewModel.getGallery(propertyId).observe(this, gallery -> {
             adapter.setData(gallery);
         });
         System.out.println("/// " + gallery);
