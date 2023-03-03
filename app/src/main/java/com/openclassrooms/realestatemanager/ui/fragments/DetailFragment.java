@@ -1,39 +1,49 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments;
 
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.adapter.PhotoPropertyAdapter;
-import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding;
-import com.openclassrooms.realestatemanager.databinding.ActivityDetailPropertyBinding;
+import com.openclassrooms.realestatemanager.databinding.FragmentDetailPropertyBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.ui.MapActivity;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailProperty extends AppCompatActivity {
+public class DetailFragment extends Fragment {
 
-    private long HOUSE_ID = 1;
-    private ActivityDetailPropertyBinding binding;
+    private long PROPERTY_ID = 1;
+    private FragmentDetailPropertyBinding binding;
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private PhotoPropertyAdapter adapter;
     private List<PropertyPhotos> gallery = new ArrayList<>();
+    private long id;
 
     private TextView tvAddress, tvSurface, tvNbRooms, tvNbBathrooms, tvNbBedrooms, tvDescription, tvInerestPoints, tvAgentName, tvDateEntry;
     private ImageView ivMapView, ivEdit;
@@ -43,22 +53,29 @@ public class DetailProperty extends AppCompatActivity {
     private Property property;
     Bundle extras;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        binding = ActivityDetailPropertyBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        extras = getIntent().getExtras();
-        property = (Property) extras.get("detail property");
-        HOUSE_ID = property.getId();
-        configureViewModel();
-        setToolbar();
-        initInputs();
-        getInfos();
+    public DetailFragment() {
+        super();
     }
 
-    private void getInfos() {
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentDetailPropertyBinding.inflate(getLayoutInflater());
+        View view = inflater.inflate(R.layout.fragment_detail_property, container, false);
+        extras = getActivity().getIntent().getExtras();
+        property = (Property) extras.get("detail property");
+        PROPERTY_ID = property.getId();
+        configureViewModel();
+        initInputs();
+        getInfos(property);
+        if (Utils.isConnectingToInternet(this.getContext())) {
+            initMap();
+        }
+
+        return view;
+    }
+
+    private void getInfos(Property property) {
         System.out.println("/// " + property);
 
         String address = property.getSurface() + " m²";
@@ -70,6 +87,8 @@ public class DetailProperty extends AppCompatActivity {
         boolean parks = property.isPark();
         boolean publicTransport = property.isPublicTransport();
         String description = property.getDescription();
+        String dateEntry = property.getDateOfEntry();
+        String agentName = property.getAgentName();
         if (!school) {
             System.out.println("/// pas d'écoles a proximité");
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llSchool.getLayoutParams();
@@ -102,26 +121,13 @@ public class DetailProperty extends AppCompatActivity {
         tvNbBathrooms.setText(nbBathrooms);
         tvNbBedrooms.setText(nbBedrooms);
         tvDescription.setText(description);
+        tvDateEntry.setText(dateEntry);
+        tvAgentName.setText(agentName);
         getGalleryPropertyFromDatabase(property.getId());
 
     }
 
-    private void setToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        binding.ivEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DetailProperty.this, AddPropertyActivity.class);
-                intent.putExtra("current_property", property);
-                intent.putExtra("id", property.getId());
-                DetailProperty.this.startActivity(intent);
-            }
-        });
-    }
+
 
     private void initInputs() {
         tvAddress = binding.tvPropertyAddressText;
@@ -141,16 +147,16 @@ public class DetailProperty extends AppCompatActivity {
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(DetailProperty.this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getActivity());
         this.realEstateManagerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RealEstateManagerViewModel.class);
-        this.realEstateManagerViewModel.init(HOUSE_ID);
+        this.realEstateManagerViewModel.init(PROPERTY_ID);
     }
 
     private void getGalleryPropertyFromDatabase(long propertyId) {
-        adapter = new PhotoPropertyAdapter(gallery, this);
+        adapter = new PhotoPropertyAdapter(gallery, this.getContext());
         rvPropertyPhotos.setAdapter(adapter);
-        rvPropertyPhotos.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true));
-        this.realEstateManagerViewModel.getGallery(propertyId).observe(this, gallery -> {
+        rvPropertyPhotos.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, true));
+        this.realEstateManagerViewModel.getGallery(propertyId).observe(getActivity(), gallery -> {
             adapter.setData(gallery);
         });
         System.out.println("/// " + gallery);
@@ -158,12 +164,61 @@ public class DetailProperty extends AppCompatActivity {
 
     private void initMap() {
         ImageView mapImageView = binding.mapImageView;
-        String mapUrl = "https://maps.googleapis.com/maps/api/staticmap?" +
-                "center=40.748817,-73.985428&zoom=12&size=400x400&key=" + "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw";
+        String address = property.getAddress();
 
         Glide.with(this)
-                .load(mapUrl)
+                .load(googleAddressToLatLng(address, "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw"))
                 .centerCrop()
                 .into(mapImageView);
+
+        mapImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), MapActivity.class);
+                DetailFragment.this.startActivity(i);
+
+            }
+        });
+    }
+
+    //convert google adress to latitude and longitude
+    public String googleAddressToLatLng(String address, String apiKey) {
+        Geocoder coder = new Geocoder(getActivity());
+        List<Address> addresses;
+        try {
+            addresses = coder.getFromLocationName(address, 10);
+            if (addresses == null) {
+            }
+            Address location = addresses.get(0);
+            double lat = location.getLatitude();
+            double lng = location.getLongitude();
+            return "https://maps.googleapis.com/maps/api/staticmap?center=" + lat + "," + lng + "&zoom=15&size=200x200" +
+                    "&markers=color:red%7C" + lat + "," + lng + "&sensor=false&key=" + apiKey;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getGalleryPropertyFromDatabase(PROPERTY_ID);
+    }
+
+    //Listener
+    public void onPropertyClick(Property property) {
+        if (property != null) {
+            this.property = property;
+            //Use for modify
+            this.id = property.getId();
+        }
+    }
+
+    //Tablet display
+    public void updateData(Property property) {
+        getInfos(property);
+        configureViewModel();
+        getGalleryPropertyFromDatabase(property.getId());
     }
 }

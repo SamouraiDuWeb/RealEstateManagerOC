@@ -1,13 +1,15 @@
 package com.openclassrooms.realestatemanager.models;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class User {
 
-    @PrimaryKey(autoGenerate = true)
-    private long userId;
+    @PrimaryKey
+    @NonNull
+    private String userId;
 
     private String name;
 
@@ -19,18 +21,18 @@ public class User {
 
     }
 
-    public User(long userId, String name, String email, String password) {
+    public User(String userId, String name, String email, String password) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

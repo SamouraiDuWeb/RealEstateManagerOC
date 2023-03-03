@@ -37,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
 
         if (user != null) {
-            startActivity(new Intent(this, ListActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
             return;
         }
@@ -51,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(false)
                 .build();
         signInLauncher.launch(signInIntent);
 
@@ -59,12 +60,7 @@ public class LoginActivity extends AppCompatActivity {
     // See: https://developer.android.com/training/basics/intents/result
     private final ActivityResultLauncher<Intent> signInLauncher = registerForActivityResult(
             new FirebaseAuthUIActivityResultContract(),
-            new ActivityResultCallback<FirebaseAuthUIAuthenticationResult>() {
-                @Override
-                public void onActivityResult(FirebaseAuthUIAuthenticationResult result) {
-                    onSignInResult(result);
-                }
-            }
+            this::onSignInResult
     );
 
     @SuppressLint("RestrictedApi")
@@ -77,7 +73,10 @@ public class LoginActivity extends AppCompatActivity {
             userToCreate = new User();
             userToCreate.setEmail(user.getEmail());
             userToCreate.setName(user.getDisplayName());
-            userToCreate.setUserId(Long.parseLong(user.getProviderId()));
+            userToCreate.setUserId(user.getUid());
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
             // ...
         } else {
             // Sign in failed. If response is null the user canceled the

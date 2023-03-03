@@ -38,6 +38,7 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.adapter.PhotoPropertyAdapter;
 import com.openclassrooms.realestatemanager.databinding.ActivityAddPropertyBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
@@ -57,7 +58,7 @@ import java.util.regex.Pattern;
 
 public class AddPropertyActivity extends AppCompatActivity {
 
-    private static final long HOUSE_ID = 1;
+    private static final long PROPERTY_ID = 1;
     private ActivityAddPropertyBinding binding;
 
     private Spinner spCategory;
@@ -133,24 +134,27 @@ public class AddPropertyActivity extends AppCompatActivity {
             initImages(id);
         }
 
-//        isInternetUp = Utils.isInternetAvailable(this);
+
         //test with internet down
-        isInternetUp = false;
-
-        if (isInternetUp) {
-            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
-
-        } else {
-            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
-            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
-        }
-
+//        isInternetUp = false;
+        isInternetUp = Utils.isInternetAvailable(this);
+        showGoogleAdress(isInternetUp);
         System.out.println("/// " + isInternetUp);
         getGoogleAddress();
 
         addPhoto();
         addProperty();
 //        showSelectedImages();
+    }
+
+    private void showGoogleAdress(boolean isInternetUp) {
+        if (isInternetUp) {
+            binding.llOfflineAddActivityAddress.setVisibility(View.INVISIBLE);
+        } else {
+            binding.llOfflineAddActivityAddress.setVisibility(View.VISIBLE);
+            binding.etAddActivityAddress.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     private void initImages(long id) {
@@ -231,7 +235,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setPublicTransport(publicTransport);
                         realEstateManagerViewModel.createProperty(propertyTest);
                         System.out.println("/// success" + propertyTest);
-                        startActivity(new Intent(AddPropertyActivity.this, ListActivity.class));
+                        startActivity(new Intent(AddPropertyActivity.this, MainActivity.class));
                         finish();
                     }
                 } else {
@@ -240,7 +244,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         addPhotos(id);
                         updateProperty(propertyToEdit);
                         System.out.println("/// success update" + propertyTest);
-                        startActivity(new Intent(AddPropertyActivity.this, ListActivity.class));
+                        startActivity(new Intent(AddPropertyActivity.this, MainActivity.class));
                         finish();
                     }
                 }
@@ -267,7 +271,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             photoToAddToDb = galleryToShow.get(i);
             photoToAddToDb.setPropertyId(propertyId);
             photoToAddToDb.setPhotoUrl(galleryToShow.get(i).getPhotoUrl());
-            photoToAddToDb.setPhotoDescription("galleryToShow.get(i).getPhotoDescription()");
+            photoToAddToDb.setPhotoDescription(galleryToShow.get(i).getPhotoDescription());
             realEstateManagerViewModel.createPropertyPhoto(photoToAddToDb);
         }
     }
@@ -491,14 +495,14 @@ public class AddPropertyActivity extends AppCompatActivity {
             Uri selectedImage = data.getData();
             String photoUrl = getPathFromUri(selectedImage);
             //New dialog to add a description to the image
-            descriptionDialog();
             photoToAdd = new PropertyPhotos(1651, "", photoUrl);
+            descriptionDialog(photoToAdd);
             galleryToShow.add(photoToAdd);
             showSelectedImages();
         }
     }
 
-    private void descriptionDialog() {
+    private void descriptionDialog(PropertyPhotos photoToAdd) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Description de l'image");
 
@@ -512,6 +516,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 imageDescription = input.getText().toString();
+                photoToAdd.setPhotoDescription(imageDescription);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -527,7 +532,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.realEstateManagerViewModel = new ViewModelProvider(this, viewModelFactory).get(RealEstateManagerViewModel.class);
-        this.realEstateManagerViewModel.init(HOUSE_ID);
+        this.realEstateManagerViewModel.init(PROPERTY_ID);
     }
 
     private boolean checkPermissions() {

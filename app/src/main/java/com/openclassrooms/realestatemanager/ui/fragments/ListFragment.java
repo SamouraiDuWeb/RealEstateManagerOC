@@ -1,23 +1,20 @@
-package com.openclassrooms.realestatemanager.ui;
+package com.openclassrooms.realestatemanager.ui.fragments;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapter.PropertyListAdapter;
 import com.openclassrooms.realestatemanager.adapter.SwipeToDeleteCallback;
@@ -25,99 +22,61 @@ import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.ui.MainActivity;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListActivity extends AppCompatActivity {
+
+public class ListFragment extends Fragment implements PropertyListAdapter.OnPropertyListener{
 
     private FragmentListBinding binding;
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private PropertyListAdapter adapter;
     private RecyclerView rvProperties;
-    private FirebaseUser currentUser;
-    private DrawerLayout drawerLayout;
-    private Toolbar toolbar;
-
     private List<Property> propertyList = new ArrayList<Property>();
 
     private SwipeToDeleteCallback swipeToDeleteCallback;
 
+    public ListFragment() {
 
+    }
+
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        View view = binding.getRoot();
 
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (currentUser == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
-
-        initView();
-        configureViewModel();
+        rvProperties = binding.rvProperty;
         initRecyclerView();
-        setListeners();
-        configureToolBar();
-        configureDrawerLayout();
+        configureViewModel();
+
         enableSwipeToDeleteAndUndo();
-    }
 
-    private void configureToolBar() {
-        this.toolbar = findViewById(R.id.toolbar_main);
-        setSupportActionBar(toolbar);
-    }
 
-    private void configureDrawerLayout() {
-        this.drawerLayout = findViewById(R.id.activity_list_drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
-    private void setListeners() {
-
-        binding.ivSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //open search edittext w/ Google autocomplete
-            }
-        });
-
-        binding.ivAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ListActivity.this, AddPropertyActivity.class));
-            }
-        });
-    }
-
-    private void initView() {
-        rvProperties = binding.rvProperties;
+        return view;
     }
 
     private void initRecyclerView() {
-        adapter = new PropertyListAdapter(propertyList, ListActivity.this);
+        adapter = new PropertyListAdapter(this.propertyList, getContext(), this);
+        rvProperties.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvProperties.setHasFixedSize(false);
         rvProperties.setAdapter(adapter);
-        rvProperties.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void configureViewModel() {
-        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
+        ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(getContext());
         realEstateManagerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RealEstateManagerViewModel.class);
-        realEstateManagerViewModel.getAll().observe(this, propertyList -> {
+        realEstateManagerViewModel.getAll().observe(getActivity(), propertyList -> {
             adapter.setData(propertyList);
+            updateDisplay();
         });
     }
 
     private void enableSwipeToDeleteAndUndo() {
-        swipeToDeleteCallback = new SwipeToDeleteCallback(this) {
+        swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
@@ -149,4 +108,18 @@ public class ListActivity extends AppCompatActivity {
         itemTouchhelper.attachToRecyclerView(rvProperties);
     }
 
+    private void updateDisplay() {
+        if (propertyList.size() == 0) {
+//            lblNoProperty.setVisibility(View.VISIBLE);
+//            rvProperties.setVisibility(View.GONE);
+        } else {
+//            lblNoProperty.setVisibility(View.GONE);
+            rvProperties.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onPropertyClick(int position) {
+        ((MainActivity) getActivity()).onPropertyClick(propertyList.get(position));
+    }
 }

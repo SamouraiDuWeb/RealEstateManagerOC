@@ -51,9 +51,9 @@ public class RealEstateManagerViewModel extends ViewModel {
         });
     }
 
-    public void updateProperty(String category, float price, float surface, String  address,
-                               int nbRooms, int nbBathRooms, int nbBedRooms,String  description, String  status, String agentName,
-    boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long id) {
+    public void updateProperty(String category, float price, float surface, String address,
+                               int nbRooms, int nbBathRooms, int nbBedRooms, String description, String status, String agentName,
+                               boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long id) {
         executor.execute(() -> {
             propertyDataSource.updateProperty(category, price, surface, address,
                     nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
@@ -62,12 +62,18 @@ public class RealEstateManagerViewModel extends ViewModel {
     }
 
     public void deleteProperty(long propertyId) {
-        propertyDataSource.deleteProperty(propertyId);
+        executor.execute(() -> {
+            propertyDataSource.deleteProperty(propertyId);
+        });
     }
 
-    public LiveData<Property> getProperty(long propertyId) { return  propertyDataSource.getProperty(propertyId); }
+    public LiveData<Property> getProperty(long propertyId) {
+        return propertyDataSource.getProperty(propertyId);
+    }
 
-    public LiveData<List<Property>> getAll() { return propertyDataSource.getAll(); }
+    public LiveData<List<Property>> getAll() {
+        return propertyDataSource.getAll();
+    }
 
     //For user
     public void createUser(User user) {
@@ -93,6 +99,8 @@ public class RealEstateManagerViewModel extends ViewModel {
     }
 
     public void deletePhotoProperty(long id) {
+        executor.execute(() -> {
         propertyPhotosDataSource.deletePhotoProperty(id);
+        });
     }
 }

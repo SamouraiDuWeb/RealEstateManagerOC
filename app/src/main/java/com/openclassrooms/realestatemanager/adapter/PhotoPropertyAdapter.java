@@ -25,7 +25,6 @@ import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 import com.openclassrooms.realestatemanager.ui.AddPropertyActivity;
-import com.openclassrooms.realestatemanager.ui.DetailProperty;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
 import java.util.ArrayList;
@@ -46,10 +45,14 @@ public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAda
     public PhotoPropertyAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_add_photo, parent, false);
         ImageView ivDelete = view.findViewById(R.id.iv_delete_photo);
+        TextView tvdescription = view.findViewById(R.id.tv_add_photo_description);
         String className = context.getClass().getSimpleName();
         System.out.println("/// context " + context.getClass().getSimpleName());
-        if (className.equals("DetailProperty")) {
+        if (className.equals("DetailFragment")) {
             ivDelete.setVisibility(View.GONE);
+        }
+        if (className.equals("AddPropertyActivity")) {
+            tvdescription.setVisibility(View.GONE);
         }
         return new ViewHolder(view);
     }

@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
@@ -8,8 +9,8 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.util.Base64;
 
-import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
+import com.openclassrooms.realestatemanager.ui.MainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -87,5 +88,11 @@ public class Utils {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return "data:image/jpeg;base64," + Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    public static boolean isTablet(Context context) {
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 }
