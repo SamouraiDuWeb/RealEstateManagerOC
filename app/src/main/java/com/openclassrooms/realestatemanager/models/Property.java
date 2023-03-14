@@ -46,8 +46,6 @@ public class Property implements Serializable {
 
     private String illustration;
 
-    private String illuDescription;
-
     private boolean school;
 
     private boolean business;
@@ -59,25 +57,46 @@ public class Property implements Serializable {
     public Property() {
     }
 
-    @Ignore
-    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
+    public Property(long id, String category, float price, float surface, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String address, String status, String dateOfEntry, String dateSold, String agentName, String illustration, boolean school, boolean business, boolean park, boolean publicTransport) {
+        this.id = id;
         this.category = category;
-        this.address = address;
         this.price = price;
         this.surface = surface;
         this.nbRooms = nbRooms;
         this.nbBathrooms = nbBathrooms;
         this.nbBedrooms = nbBedrooms;
         this.description = description;
+        this.address = address;
         this.status = status;
+        this.dateOfEntry = dateOfEntry;
+        this.dateSold = dateSold;
         this.agentName = agentName;
+        this.illustration = illustration;
         this.school = school;
         this.business = business;
         this.park = park;
         this.publicTransport = publicTransport;
-        this.dateOfEntry = dateOfEntry;
-        this.dateSold = dateSold;
     }
+
+//    @Ignore
+//    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
+//        this.category = category;
+//        this.address = address;
+//        this.price = price;
+//        this.surface = surface;
+//        this.nbRooms = nbRooms;
+//        this.nbBathrooms = nbBathrooms;
+//        this.nbBedrooms = nbBedrooms;
+//        this.description = description;
+//        this.status = status;
+//        this.agentName = agentName;
+//        this.school = school;
+//        this.business = business;
+//        this.park = park;
+//        this.publicTransport = publicTransport;
+//        this.dateOfEntry = dateOfEntry;
+//        this.dateSold = dateSold;
+//    }
 
     public String getCategory() {
         return category;
@@ -159,22 +178,6 @@ public class Property implements Serializable {
         this.status = status;
     }
 
-//    public Date getDateEntry() {
-//        return dateEntry;
-//    }
-//
-//    public void setDateEntry(Date dateEntry) {
-//        this.dateEntry = dateEntry;
-//    }
-//
-//    public Date getDateSold() {
-//        return dateSold;
-//    }
-//
-//    public void setDateSold(Date dateSold) {
-//        this.dateSold = dateSold;
-//    }
-
     public String getAgentName() {
         return agentName;
     }
@@ -229,6 +232,14 @@ public class Property implements Serializable {
 
     public void setDateSold(String dateSold) {
         this.dateSold = dateSold;
+    }
+
+    public String getIllustration() {
+        return illustration;
+    }
+
+    public void setIllustration(String illustration) {
+        this.illustration = illustration;
     }
 
 

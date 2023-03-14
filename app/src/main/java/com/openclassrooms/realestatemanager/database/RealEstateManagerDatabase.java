@@ -17,7 +17,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 import com.openclassrooms.realestatemanager.models.User;
 
-@Database(entities = {Property.class, PropertyPhotos.class, User.class}, version = 4, exportSchema = false)
+@Database(entities = {Property.class, PropertyPhotos.class, User.class}, version = 5, exportSchema = false)
 public abstract class RealEstateManagerDatabase extends RoomDatabase {
 
     private static volatile RealEstateManagerDatabase INSTANCE;

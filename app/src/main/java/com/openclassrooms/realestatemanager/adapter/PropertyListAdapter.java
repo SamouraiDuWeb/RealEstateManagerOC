@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
@@ -105,6 +106,7 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
 
         public void updateProperty(Property property) {
 
+            Glide.with(context).load(property.getIllustration()).into(propertyPhoto);
             propertyName.setText(property.getCategory());
             propertyPrice.setText(String.valueOf((int) property.getPrice()));
             propertyAddress.setText(property.getAddress());

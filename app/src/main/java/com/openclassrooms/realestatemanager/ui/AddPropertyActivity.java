@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -107,6 +108,7 @@ public class AddPropertyActivity extends AppCompatActivity {
     private long id;
     private Button btnIllustration;
     private String illustration;
+    private ImageView ivIllustration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +203,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         cbParks.setChecked(property.isPark());
         cbPublicTransports.setChecked(property.isPublicTransport());
         etDescription.setText(String.valueOf(property.getDescription()));
+        Glide.with(this).load(property.getIllustration()).into(ivIllustration);
     }
 
     private void showSelectedImages() {
@@ -236,6 +239,7 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setBusiness(business);
                         propertyTest.setPark(park);
                         propertyTest.setAddress(address);
+                        propertyTest.setIllustration(illustration);
                         propertyTest.setPublicTransport(publicTransport);
 //                        propertyTest.setIllustration(illustration);
                         realEstateManagerViewModel.createProperty(propertyTest);
@@ -451,6 +455,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         rvGallery = binding.rvGallery;
         cbStatus = binding.cbStatus;
         btnIllustration = binding.btnAddActivityAddIllustration;
+        ivIllustration = binding.ivIllustration;
     }
 
     private void setToolbar() {
@@ -533,9 +538,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         } else if (requestCode == ILLUSTRATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             Uri selectedImage = data.getData();
             illustration = getPathFromUri(selectedImage);
-//            PropertyPhotos illuToAdd = new PropertyPhotos(1651, "", photoUrl);
-//            descriptionDialog(illuToAdd);
-//            Glide.with(AddPropertyActivity.this).load(data).load(selectedImage).into(ivIllustration);
+            Glide.with(AddPropertyActivity.this).load(data).load(selectedImage).into(ivIllustration);
         }
     }
 

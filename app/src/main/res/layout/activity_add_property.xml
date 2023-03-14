@@ -299,6 +299,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/ll_add_activity_interestpoints" />
 
+            <ImageView
+                android:id="@+id/iv_illustration"
+                android:layout_width="0dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toBottomOf="@id/btn_add_activity_add_illustration"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
             <Button
                 android:id="@+id/btn_add_activity_add_photo"
@@ -308,7 +316,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_add_activity_add_illustration" />
+                app:layout_constraintTop_toBottomOf="@id/iv_illustration" />
 
             <HorizontalScrollView
                 android:id="@+id/iv_add_activity_photo_gallery"
