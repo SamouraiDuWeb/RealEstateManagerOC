@@ -42,16 +42,31 @@ public class PropertyDataRepository {
 
     //Update property
     public void updateProperty(
-            String category, float price, float surface, String  address,
-            int nbRooms, int nbBathRooms, int nbBedRooms,String  description,String  status,String agentName,
+            String category, float price, float surface, String address,
+            int nbRooms, int nbBathRooms, int nbBedRooms, String description, String status, String agentName,
             boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long id
     ) {
-        propertyDao.updateProperty(category, price,surface, address,
+        propertyDao.updateProperty(category, price, surface, address,
                 nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
                 school, business, park, publicTransport, dateOfEntry, dateSold, id);
     }
 
     public void deleteProperty(long propertyId) {
         propertyDao.deleteProperty(propertyId);
+    }
+
+    public LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park) {
+
+        return propertyDao.getSearchedProperty(
+                miniPrice,
+                maxiPrice,
+                miniSurface,
+                maxiSurface,
+                miniRoom,
+                maxiRoom,
+                school,
+                business,
+                publicTransport,
+                park);
     }
 }

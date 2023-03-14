@@ -5,28 +5,6 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/detail_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:navigationIcon="@drawable/ic_baseline_arrow_back_24"
-        android:title="@string/ajouter_un_bien"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:titleTextColor="@android:color/white">
-
-        <ImageView
-            android:id="@+id/iv_edit"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_baseline_edit_24"
-            android:layout_gravity="end"
-            android:layout_margin="16dp"/>
-
-    </androidx.appcompat.widget.Toolbar>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -34,30 +12,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <!--            <HorizontalScrollView-->
-            <!--                android:id="@+id/iv_detail_activity_photo_gallery"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:maxHeight="50dp"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintStart_toStartOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent">-->
-
-            <!--                <androidx.recyclerview.widget.RecyclerView-->
-            <!--                    android:id="@+id/rv_detail_photos"-->
-            <!--                    android:layout_width="0dp"-->
-            <!--                    android:layout_height="170dp"-->
-            <!--                    android:layout_gravity="bottom"-->
-            <!--                    android:orientation="horizontal"-->
-            <!--                    tools:listitem="@layout/item_add_photo" />-->
-            <!--            </HorizontalScrollView>-->
 
             <HorizontalScrollView
                 android:id="@+id/iv_detail_activity_photo_gallery"

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,7 +14,7 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.openclassrooms.realestatemanager.R;
+import com.openclassrooms.realestatemanager.databinding.ActivityLoginBinding;
 import com.openclassrooms.realestatemanager.models.User;
 
 import java.util.Arrays;
@@ -23,7 +22,7 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginActivity binding;
+    private ActivityLoginBinding binding;
 
     private FirebaseUser user;
 
@@ -32,7 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         FirebaseApp.initializeApp(this);
 
@@ -79,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
             finish();
             // ...
         } else {
+            System.out.println("/// " + response.getError());
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.

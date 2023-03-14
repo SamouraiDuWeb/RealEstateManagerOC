@@ -25,6 +25,7 @@ import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.adapter.PhotoPropertyAdapter;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailPropertyBinding;
+import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -61,17 +62,15 @@ public class DetailFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentDetailPropertyBinding.inflate(getLayoutInflater());
-        View view = inflater.inflate(R.layout.fragment_detail_property, container, false);
-        extras = getActivity().getIntent().getExtras();
-        property = (Property) extras.get("detail property");
-        PROPERTY_ID = property.getId();
+        View view = binding.getRoot();
         configureViewModel();
         initInputs();
-        getInfos(property);
-        if (Utils.isConnectingToInternet(this.getContext())) {
-            initMap();
+        if (property != null) {
+            getInfos(property);
+            if (Utils.isConnectingToInternet(getContext())) {
+                initMap(property);
+            }
         }
-
         return view;
     }
 
@@ -162,7 +161,7 @@ public class DetailFragment extends Fragment {
         System.out.println("/// " + gallery);
     }
 
-    private void initMap() {
+    private void initMap(Property property) {
         ImageView mapImageView = binding.mapImageView;
         String address = property.getAddress();
 
@@ -202,8 +201,23 @@ public class DetailFragment extends Fragment {
 
     @Override
     public void onStart() {
+        getGalleryPropertyFromDatabase(id);
+        //Smartphone
+        if (property != null) {
+            this.updateData(property);
+        }
+        //Tablet
+        this.updateDisplay(property);
         super.onStart();
-        getGalleryPropertyFromDatabase(PROPERTY_ID);
+    }
+
+    //Update the display
+    public void updateDisplay(Property property) {
+        if (property == null) {
+            getView().setVisibility(View.GONE);
+        } else {
+            getView().setVisibility(View.VISIBLE);
+        }
     }
 
     //Listener
@@ -219,6 +233,7 @@ public class DetailFragment extends Fragment {
     public void updateData(Property property) {
         getInfos(property);
         configureViewModel();
+        initMap(property);
         getGalleryPropertyFromDatabase(property.getId());
     }
 }

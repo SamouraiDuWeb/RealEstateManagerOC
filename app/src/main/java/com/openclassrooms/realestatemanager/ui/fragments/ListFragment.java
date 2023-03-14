@@ -1,5 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ import java.util.List;
 
 public class ListFragment extends Fragment implements PropertyListAdapter.OnPropertyListener{
 
+    private static final int SEARCH_ACTIVITY_REQUEST_CODE = 101;
+    private static final String BUNDLE_RESULT_LIST = "BUNDLE_RESULT_LIST";
     private FragmentListBinding binding;
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private PropertyListAdapter adapter;
@@ -121,5 +125,14 @@ public class ListFragment extends Fragment implements PropertyListAdapter.OnProp
     @Override
     public void onPropertyClick(int position) {
         ((MainActivity) getActivity()).onPropertyClick(propertyList.get(position));
+    }
+
+    //Use to display the search properties recover from searchActivity
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (SEARCH_ACTIVITY_REQUEST_CODE == requestCode && Activity.RESULT_OK == resultCode) {
+            List<Property> searchHouseList = (List<Property>) data.getSerializableExtra(BUNDLE_RESULT_LIST);
+            adapter.setData(searchHouseList);
+        }
     }
 }

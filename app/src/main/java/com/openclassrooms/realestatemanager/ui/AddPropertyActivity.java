@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AddressComponent;
@@ -81,7 +82,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private int GALLERY_REQUEST_CODE = 101;
-
+    private int ILLUSTRATION_REQUEST_CODE = 102;
     private Property propertyToAdd;
     private String picture;
     private Property propertyTest;
@@ -104,6 +105,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     private Bundle extras;
     private Property propertyToEdit;
     private long id;
+    private Button btnIllustration;
+    private String illustration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +216,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (id == 0 ||id == -1) {
                     getUserInputs();
+
 //                    realEstateManagerViewModel.deleteAllProperties();
                     if (verifyInputs()) {
                         Date date = Calendar.getInstance().getTime();
@@ -227,12 +231,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setNbBedrooms(nbBedRooms);
                         propertyTest.setDescription(description);
                         propertyTest.setStatus("disponible");
-                        propertyTest.setAgentName(user.getDisplayName());
+                        propertyTest.setAgentName(propertyUserName);
                         propertyTest.setSchool(school);
                         propertyTest.setBusiness(business);
                         propertyTest.setPark(park);
                         propertyTest.setAddress(address);
                         propertyTest.setPublicTransport(publicTransport);
+//                        propertyTest.setIllustration(illustration);
                         realEstateManagerViewModel.createProperty(propertyTest);
                         System.out.println("/// success" + propertyTest);
                         startActivity(new Intent(AddPropertyActivity.this, MainActivity.class));
@@ -278,6 +283,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private boolean verifyInputs() {
         Boolean isOk;
+        propertyUserName = "Leoo";
         if (category.isEmpty() || category.equals("Selectionnez une categorie")) {
             Toast.makeText(this, "Veuillez indiquer la catégorie du bien", Toast.LENGTH_LONG).show();
             isOk = false;
@@ -339,6 +345,30 @@ public class AddPropertyActivity extends AppCompatActivity {
                         // Open the gallery
                         Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(galleryIntent, GALLERY_REQUEST_CODE);
+                    }
+                });
+                builder.create().show();
+            }
+        });
+
+        btnIllustration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Create a dialog
+                if (!checkPermissions()) {
+                    requestPermissions();
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(AddPropertyActivity.this);
+                builder.setTitle("Add illustration");
+                builder.setMessage("Select a source to add illustration");
+
+                // Set the positive button to open the gallery
+                builder.setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Open the gallery
+                        Intent galleryIntent2 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(galleryIntent2, ILLUSTRATION_REQUEST_CODE);
                     }
                 });
                 builder.create().show();
@@ -420,6 +450,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         etCity = binding.etAddActivityCity;
         rvGallery = binding.rvGallery;
         cbStatus = binding.cbStatus;
+        btnIllustration = binding.btnAddActivityAddIllustration;
     }
 
     private void setToolbar() {
@@ -499,6 +530,12 @@ public class AddPropertyActivity extends AppCompatActivity {
             descriptionDialog(photoToAdd);
             galleryToShow.add(photoToAdd);
             showSelectedImages();
+        } else if (requestCode == ILLUSTRATION_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            illustration = getPathFromUri(selectedImage);
+//            PropertyPhotos illuToAdd = new PropertyPhotos(1651, "", photoUrl);
+//            descriptionDialog(illuToAdd);
+//            Glide.with(AddPropertyActivity.this).load(data).load(selectedImage).into(ivIllustration);
         }
     }
 

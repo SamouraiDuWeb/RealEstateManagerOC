@@ -3,8 +3,11 @@ package com.openclassrooms.realestatemanager.ui;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -26,6 +29,7 @@ import com.openclassrooms.realestatemanager.ui.fragments.ListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int SEARCH_ACTIVITY_REQUEST_CODE = 101;
     private MainActivityBinding binding;
     private FirebaseUser currentUser;
     private DrawerLayout drawerLayout;
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ListFragment listFragment;
     private DetailFragment detailFragment;
     private long id;
+    private Fragment currentFragment;
 
     public enum WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
 
@@ -45,30 +50,15 @@ public class MainActivity extends AppCompatActivity {
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (currentUser == null) {
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
-            return;
-        }
+//        if (currentUser == null) {
+//            startActivity(new Intent(this, LoginActivity.class));
+//            finish();
+//            return;
+//        }
 
         configureAndShowListFragment();
+        configureAndShowDetailFragment();
 
-        // Add a utility view to the container to hook into
-        // View.onConfigurationChanged. This is required for all
-        // activities, even those that don't handle configuration
-        // changes. We also can't use Activity.onConfigurationChanged,
-        // since there are situations where that won't be called when
-        // the configuration changes. View.onConfigurationChanged is
-        // called in those scenarios.
-        ViewGroup container = binding.getRoot();
-        container.addView(new View(this) {
-            @Override
-            protected void onConfigurationChanged(Configuration newConfig) {
-                super.onConfigurationChanged(newConfig);
-                computeWindowSizeClasses();
-            }
-        });
-        computeWindowSizeClasses();
         setToolbar();
         configureDrawerLayout();
     }
@@ -83,37 +73,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setToolbar() {
-        toolbar = binding.toolbarMain;
+        this.toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        binding.ivEdit.setVisibility(View.GONE);
-        binding.ivAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, AddPropertyActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
     }
 
-    private void computeWindowSizeClasses() {
-        WindowMetrics metrics = WindowMetricsCalculator.getOrCreate()
-                .computeCurrentWindowMetrics(this);
-
-        float widthDp = metrics.getBounds().width() /
-                getResources().getDisplayMetrics().density;
-
-        if (widthDp < 600f) {
-            widthWindowSizeClass = WindowSizeClass.COMPACT;
-        } else if (widthDp < 840f) {
-            widthWindowSizeClass = WindowSizeClass.MEDIUM;
-        } else {
-            widthWindowSizeClass = WindowSizeClass.EXPANDED;
-        }
-
-        // Use widthWindowSizeClass and heightWindowSizeClass.
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the toolbar menu
+        getMenuInflater().inflate(R.menu.topbar_menu, menu);
+        return true;
     }
 
     public void configureAndShowListFragment() {
@@ -126,6 +94,16 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
     }
+    public void configureAndShowDetailFragment() {
+        detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.frag2);
+        // Add detailFragment only if in Tablet mode
+        if (detailFragment == null && findViewById(R.id.frag2) != null) {
+            detailFragment = new DetailFragment();
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.frag2, detailFragment)
+                    .commit();
+        }
+    }
 
     //Transmission of the information of the clicked property for the display of details on DetailsFragment
     public void onPropertyClick(Property property) {
@@ -133,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         if (detailFragment != null && Utils.isTablet(this)) {
             //Tablet
             detailFragment.updateData(property);
-
+            detailFragment.updateDisplay(property);
         } else {
             //Smartphone
             detailFragment = (DetailFragment) getSupportFragmentManager().findFragmentById(R.id.frag2);
@@ -145,5 +123,52 @@ public class MainActivity extends AppCompatActivity {
             detailFragment.onPropertyClick(property);
         }
         this.id = property.getId();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //Handle actions on menu items
+        switch (item.getItemId()) {
+            //Start AddActivity when add button is clicked
+            case R.id.app_bar_add_property:
+                Intent intentAdd = new Intent(MainActivity.this, AddPropertyActivity.class);
+                startActivity(intentAdd);
+                return true;
+
+            //Start AddActivity when modify button is clicked
+            case R.id.app_bar_edit:
+                if (id != 0) {
+                    Intent intentModify = new Intent(MainActivity.this, AddPropertyActivity.class);
+                    intentModify.putExtra("id", id);
+                    startActivity(intentModify);
+                } else {
+                    Toast.makeText(this, "Selectionner un bien à vendre", Toast.LENGTH_LONG).show();
+                }
+                return true;
+
+            //Start SearchActivity when add button is clicked
+            case R.id.app_bar_search:
+                Intent searchActivityIntent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivityForResult(searchActivityIntent, SEARCH_ACTIVITY_REQUEST_CODE);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+
+                case SEARCH_ACTIVITY_REQUEST_CODE:
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frag1);
+                    fragment.onActivityResult(requestCode, resultCode, data);
+
+                    break;
+            }
+        }
     }
 }

@@ -44,6 +44,10 @@ public class Property implements Serializable {
 
     private String agentName;
 
+    private String illustration;
+
+    private String illuDescription;
+
     private boolean school;
 
     private boolean business;

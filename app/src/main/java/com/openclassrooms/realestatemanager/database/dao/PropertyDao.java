@@ -9,9 +9,6 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.openclassrooms.realestatemanager.models.Property;
-import com.openclassrooms.realestatemanager.models.PropertyAddress;
-import com.openclassrooms.realestatemanager.models.PropertyPhotos;
-import com.openclassrooms.realestatemanager.models.User;
 
 import java.util.List;
 
@@ -60,4 +57,14 @@ public interface PropertyDao {
 
     @Query("DELETE FROM Property WHERE id = :propertyId")
     int deleteProperty(long propertyId);
+
+@Query("SELECT * FROM Property WHERE " +
+            " price BETWEEN :miniPrice AND :maxiPrice " +
+            " AND surface BETWEEN :miniSurface AND :maxiSurface" +
+            " AND nbRooms BETWEEN :miniRoom AND :maxiRoom" +
+            " AND school LIKE :school" +
+            " AND business LIKE :business" +
+            " AND publicTransport LIKE :publicTransport" +
+            " AND park LIKE :park")
+LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park);
 }
