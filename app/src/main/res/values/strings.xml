@@ -17,4 +17,5 @@
     <string name="ajouter_un_bien">Ajouter un bien</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="conversion_euro_dollar">Conversion Euro/Dollar</string>
 </resources>

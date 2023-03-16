@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +13,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.adapter.PhotoPropertyAdapter;
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailPropertyBinding;
-import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -46,13 +42,12 @@ public class DetailFragment extends Fragment {
     private List<PropertyPhotos> gallery = new ArrayList<>();
     private long id;
 
-    private TextView tvAddress, tvSurface, tvNbRooms, tvNbBathrooms, tvNbBedrooms, tvDescription, tvInerestPoints, tvAgentName, tvDateEntry;
-    private ImageView ivMapView, ivEdit;
+    private TextView tvAddress, tvSurface, tvNbRooms, tvNbBathrooms, tvNbBedrooms, tvDescription, tvAgentName, tvDateEntry;
+    private ImageView ivMapView;
     private RecyclerView rvPropertyPhotos;
     private LinearLayout llSchool, llBusiness, llParks, llPublicTransports;
 
     private Property property;
-    Bundle extras;
 
     public DetailFragment() {
         super();
@@ -155,9 +150,7 @@ public class DetailFragment extends Fragment {
         adapter = new PhotoPropertyAdapter(gallery, this.getContext());
         rvPropertyPhotos.setAdapter(adapter);
         rvPropertyPhotos.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, true));
-        this.realEstateManagerViewModel.getGallery(propertyId).observe(getActivity(), gallery -> {
-            adapter.setData(gallery);
-        });
+        this.realEstateManagerViewModel.getGallery(propertyId).observe(getActivity(), gallery -> adapter.setData(gallery));
         System.out.println("/// " + gallery);
     }
 

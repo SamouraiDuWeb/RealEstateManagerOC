@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:name="android"
-        android:title="dlmfuihjqsdmkfjqhsdf" />
+        android:title="@string/conversion_euro_dollar"
+        android:icon="@drawable/ic_baseline_currency_exchange_24"
+        android:id="@+id/activity_main_drawer_conversion_euro_dollars"/>
 </menu>

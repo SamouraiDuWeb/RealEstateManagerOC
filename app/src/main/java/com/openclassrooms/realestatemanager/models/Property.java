@@ -2,17 +2,10 @@ package com.openclassrooms.realestatemanager.models;
 
 import android.content.ContentValues;
 
-import androidx.room.Embedded;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-import androidx.room.RoomWarnings;
-import androidx.room.TypeConverters;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 public class Property implements Serializable {
@@ -77,26 +70,6 @@ public class Property implements Serializable {
         this.park = park;
         this.publicTransport = publicTransport;
     }
-
-//    @Ignore
-//    public Property(String category, float price, float surface, String address, int nbRooms, int nbBathrooms, int nbBedrooms, String description, String status, String agentName, boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
-//        this.category = category;
-//        this.address = address;
-//        this.price = price;
-//        this.surface = surface;
-//        this.nbRooms = nbRooms;
-//        this.nbBathrooms = nbBathrooms;
-//        this.nbBedrooms = nbBedrooms;
-//        this.description = description;
-//        this.status = status;
-//        this.agentName = agentName;
-//        this.school = school;
-//        this.business = business;
-//        this.park = park;
-//        this.publicTransport = publicTransport;
-//        this.dateOfEntry = dateOfEntry;
-//        this.dateSold = dateSold;
-//    }
 
     public String getCategory() {
         return category;

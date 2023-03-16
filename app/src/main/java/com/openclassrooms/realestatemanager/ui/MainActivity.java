@@ -1,23 +1,25 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.window.layout.WindowMetrics;
-import androidx.window.layout.WindowMetricsCalculator;
 
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.openclassrooms.realestatemanager.R;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private DetailFragment detailFragment;
     private long id;
     private Fragment currentFragment;
+    private NavigationView navigationView;
 
     public enum WindowSizeClass { COMPACT, MEDIUM, EXPANDED }
 
@@ -56,11 +59,14 @@ public class MainActivity extends AppCompatActivity {
 //            return;
 //        }
 
+        System.out.println("/// " + Utils.getGoodFormatDate());
+
         configureAndShowListFragment();
         configureAndShowDetailFragment();
 
         setToolbar();
         configureDrawerLayout();
+        configureNavigationView();
     }
 
 
@@ -70,6 +76,32 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    private void configureNavigationView() {
+        this.navigationView = findViewById(R.id.activity_main_nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                switch (id) {
+                    case R.id.activity_main_drawer_conversion_euro_dollars:
+                        // dialog with 1 edit text and 1 textview to convert the price
+                        convertPriceDialog();
+                        break;
+                    default:
+                        break;
+                }
+                drawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            }
+        });
+    }
+
+    private void convertPriceDialog() {
+        CurrencyDialog currencyDialog = new CurrencyDialog(MainActivity.this);
+        currencyDialog.show();
     }
 
     private void setToolbar() {
@@ -124,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         }
         this.id = property.getId();
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

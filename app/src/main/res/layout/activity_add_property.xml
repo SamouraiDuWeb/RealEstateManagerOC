@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:padding="16dp"
                 android:text="Ajouter un bien"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

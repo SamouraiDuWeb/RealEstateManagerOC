@@ -10,6 +10,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.database.dao.PropertyPhotosDao;
 import com.openclassrooms.realestatemanager.database.dao.UserDao;
@@ -69,7 +70,8 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 propertyOne.put("business", true);
                 propertyOne.put("park", true);
                 propertyOne.put("publicTransport", true);
-                propertyOne.put("dateOfEntry", System.currentTimeMillis());
+                propertyOne.put("dateOfEntry", Utils.getGoodFormatDate()
+                );
 
                 db.insert("Property", OnConflictStrategy.IGNORE, propertyOne);
 
@@ -90,7 +92,7 @@ public abstract class RealEstateManagerDatabase extends RoomDatabase {
                 propertyTwo.put("business", true);
                 propertyTwo.put("park", true);
                 propertyTwo.put("publicTransport", true);
-                propertyTwo.put("dateOfEntry", System.currentTimeMillis());
+                propertyTwo.put("dateOfEntry", Utils.getGoodFormatDate());
 
 
                 db.insert("Property", OnConflictStrategy.IGNORE, propertyTwo);

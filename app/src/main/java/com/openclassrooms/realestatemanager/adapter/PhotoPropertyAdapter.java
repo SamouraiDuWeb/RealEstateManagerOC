@@ -1,15 +1,10 @@
 package com.openclassrooms.realestatemanager.adapter;
 
-import static com.google.android.material.resources.MaterialResources.getDrawable;
-
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,10 +19,8 @@ import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
-import com.openclassrooms.realestatemanager.ui.AddPropertyActivity;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAdapter.ViewHolder> {
@@ -80,7 +73,6 @@ public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAda
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         private final ImageView propertyPhotoView;
-        private String picture;
         private TextView description;
         private ImageView ivDelete;
         private RealEstateManagerViewModel realEstateManagerViewModel;
@@ -107,23 +99,20 @@ public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAda
             if (photos.getPhotoUrl().isEmpty()) {
                 propertyPhotoView.setImageResource(R.drawable.ic_baseline_add_a_photo_24);
             } else {
-                picture = Utils.getPhotoGalleryFromDevice(photos);
+                String picture = Utils.getPhotoGalleryFromDevice(photos);
                 Glide.with(propertyPhotoView.getContext())
                         .load(picture)
                         .centerCrop()
                         .into(propertyPhotoView);
             }
 
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) clItem.getLayoutParams();
-                    params.width = (int) (0);
-                    itemView.setLayoutParams(params);
-                    long id = photos.getPhotosId();
-                    if (id != 0) {
-                        realEstateManagerViewModel.deletePhotoProperty(id);
-                    }
+            ivDelete.setOnClickListener(view -> {
+                ViewGroup.LayoutParams params = (ViewGroup.LayoutParams) clItem.getLayoutParams();
+                params.width = (int) (0);
+                itemView.setLayoutParams(params);
+                long id = photos.getPhotosId();
+                if (id != 0) {
+                    realEstateManagerViewModel.deletePhotoProperty(id);
                 }
             });
         }

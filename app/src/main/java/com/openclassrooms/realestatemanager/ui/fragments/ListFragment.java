@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.adapter.PropertyListAdapter;
 import com.openclassrooms.realestatemanager.adapter.SwipeToDeleteCallback;
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding;
@@ -39,7 +38,7 @@ public class ListFragment extends Fragment implements PropertyListAdapter.OnProp
     private RealEstateManagerViewModel realEstateManagerViewModel;
     private PropertyListAdapter adapter;
     private RecyclerView rvProperties;
-    private List<Property> propertyList = new ArrayList<Property>();
+    private List<Property> propertyList = new ArrayList<>();
 
     private SwipeToDeleteCallback swipeToDeleteCallback;
 
@@ -93,13 +92,9 @@ public class ListFragment extends Fragment implements PropertyListAdapter.OnProp
 
                 Snackbar snackbar = Snackbar
                         .make(binding.getRoot(), "Item was removed from the list.", Snackbar.LENGTH_LONG);
-                snackbar.setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        adapter.restoreItem(item, position);
-                        rvProperties.scrollToPosition(position);
-                    }
+                snackbar.setAction("UNDO", view -> {
+                    adapter.restoreItem(item, position);
+                    rvProperties.scrollToPosition(position);
                 });
 
                 snackbar.setActionTextColor(Color.YELLOW);

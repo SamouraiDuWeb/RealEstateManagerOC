@@ -6,7 +6,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.User;
 
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 public interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long createUser(User user);
+    void createUser(User user);
 
     @Query("SELECT * FROM User WHERE userId = :userId")
     LiveData<User> getUser(long userId);
