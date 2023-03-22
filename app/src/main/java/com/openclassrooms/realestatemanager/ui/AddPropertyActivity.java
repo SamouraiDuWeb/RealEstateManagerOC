@@ -70,6 +70,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     private Button btnAddProperty;
     private LinearLayout llGallery;
     private CheckBox cbStatus;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private EditText etAddress;
 
     private String category, address, streetNumber, streetName, zipCode, city, description, dateOfEntry, dateSold, status = "disponible";
     private float surface = 0, price = 0;
@@ -204,6 +206,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         cbPublicTransports.setChecked(property.isPublicTransport());
         etDescription.setText(String.valueOf(property.getDescription()));
         Glide.with(this).load(property.getIllustration()).into(ivIllustration);
+        autocompleteFragment.setText(property.getAddress());
     }
 
     private void showSelectedImages() {
@@ -217,9 +220,8 @@ public class AddPropertyActivity extends AppCompatActivity {
         btnAddProperty.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                getUserInputs();
                 if (id == 0 ||id == -1) {
-                    getUserInputs();
-
 //                    realEstateManagerViewModel.deleteAllProperties();
                     if (verifyInputs()) {
                         Date date = Calendar.getInstance().getTime();
@@ -241,14 +243,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setAddress(address);
                         propertyTest.setIllustration(illustration);
                         propertyTest.setPublicTransport(publicTransport);
-//                        propertyTest.setIllustration(illustration);
+                        propertyTest.setIllustration(illustration);
                         realEstateManagerViewModel.createProperty(propertyTest);
                         System.out.println("/// success" + propertyTest);
                         startActivity(new Intent(AddPropertyActivity.this, MainActivity.class));
                         finish();
                     }
                 } else {
-                    getUserInputs();
                     if (verifyInputs()) {
                         addPhotos(id);
                         updateProperty(propertyToEdit);
@@ -267,10 +268,12 @@ public class AddPropertyActivity extends AppCompatActivity {
             dateSold = new SimpleDateFormat("dd-MM-yyyy").format(date);
             status = "Vendu";
         }
+        EditText autocompleteEditText = (EditText) autocompleteFragment.getView().findViewById(getResources().getIdentifier("places_autocomplete_search_input", "id", getPackageName()));
+        address = autocompleteEditText.getText().toString();
 
         realEstateManagerViewModel.updateProperty(category, price,surface, address,
-                nbRooms, nbBathRooms, nbBedRooms, description, status, user.getDisplayName(),
-                school, business, park, publicTransport, dateOfEntry, dateSold, id);
+                nbRooms, nbBathRooms, nbBedRooms, description, status, "Leoo",
+                school, business, park, publicTransport, dateOfEntry, dateSold);
     }
 
     private void addPhotos(long propertyId) {
@@ -293,18 +296,6 @@ public class AddPropertyActivity extends AppCompatActivity {
             isOk = false;
         } else if (Float.toString(surface).isEmpty()) {
             Toast.makeText(this, "Veuillez saisir le surface du bien", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else if (streetNumber.isEmpty()) {
-            Toast.makeText(this, "Veuillez saisir un numéro de rue", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else if (streetName.isEmpty()) {
-            Toast.makeText(this, "Veuillez indiquer une rue", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else if (zipCode.isEmpty()) {
-            Toast.makeText(this, "Veuillez indiquer le code postal", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else if (city.isEmpty()) {
-            Toast.makeText(this, "Veuillez saisir une ville", Toast.LENGTH_LONG).show();
             isOk = false;
         } else if (description.isEmpty()) {
             Toast.makeText(this, "Veuillez indiquer une description", Toast.LENGTH_LONG).show();
@@ -456,6 +447,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         cbStatus = binding.cbStatus;
         btnIllustration = binding.btnAddActivityAddIllustration;
         ivIllustration = binding.ivIllustration;
+        autocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
     }
 
     private void setToolbar() {
@@ -468,8 +460,6 @@ public class AddPropertyActivity extends AppCompatActivity {
 
     private void getGoogleAddress() {
 
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
         autocompleteFragment.setCountry("FR");
         autocompleteFragment.setHint("Recherche");
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.ADDRESS_COMPONENTS, Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));

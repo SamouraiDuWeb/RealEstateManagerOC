@@ -22,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.databinding.MainActivityBinding;
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         setToolbar();
         configureDrawerLayout();
         configureNavigationView();
+        initFirebaseDb();
     }
 
 
@@ -204,5 +207,33 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public FirebaseDatabase database;
+    public DatabaseReference propertiesRef;
+
+    public void initFirebaseDb(){
+        Property propertyTest = new Property();
+        propertyTest.setDateOfEntry(String.valueOf(System.currentTimeMillis()));
+        propertyTest.setCategory("Maison");
+        propertyTest.setPrice(720000);
+        propertyTest.setSurface(120);
+        propertyTest.setNbRooms(2);
+        propertyTest.setNbBathrooms(2);
+        propertyTest.setNbBedrooms(2);
+        propertyTest.setDescription("Jolie description de maison");
+        propertyTest.setStatus("disponible");
+        propertyTest.setAgentName("Leo");
+        propertyTest.setSchool(true);
+        propertyTest.setBusiness(true);
+        propertyTest.setPark(true);
+        propertyTest.setAddress("12 rue Alexander fleming 75019 Paris");
+        propertyTest.setIllustration("");
+        propertyTest.setPublicTransport(true);
+
+        database = FirebaseDatabase.getInstance("https://realestatemanager-372212-default-rtdb.europe-west1.firebasedatabase.app/");
+        propertiesRef = database.getReference("properties");
+        String key = propertiesRef.push().getKey();
+        propertiesRef.child(key).setValue(propertyTest);
     }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 
 public class SearchActivity extends AppCompatActivity  {
 
-    private static final long HOUSE_ID = 1;
+    private static final long PROPERTY_ID = 1;
     public static final String BUNDLE_RESULT_LIST = "BUNDLE_RESULT_LIST";
     private SearchActivityBinding binding;
     private RealEstateManagerViewModel realEstateManagerViewModel;
@@ -92,12 +92,13 @@ public class SearchActivity extends AppCompatActivity  {
         if (miniPrice == 0) {
             Toast.makeText(this, "Saisir le prix minimum du bien", Toast.LENGTH_LONG).show();
             isOk = false;
-        } else if (miniPrice == 0) {
+        } else if (maxiPrice == 0) {
             Toast.makeText(this, "Saisir le prix maximum du bien", Toast.LENGTH_LONG).show();
             isOk = false;
         } else {
             isOk = true;
         }
+        //TODO : ici ajouter les verifications
         return isOk;
     }
 
@@ -145,7 +146,7 @@ public class SearchActivity extends AppCompatActivity  {
     private void configureViewModel() {
         ViewModelFactory viewModelFactory = Injection.provideViewModelFactory(this);
         this.realEstateManagerViewModel = ViewModelProviders.of(this, viewModelFactory).get(RealEstateManagerViewModel.class);
-        this.realEstateManagerViewModel.init(HOUSE_ID);
+        this.realEstateManagerViewModel.init(PROPERTY_ID);
     }
 
 }

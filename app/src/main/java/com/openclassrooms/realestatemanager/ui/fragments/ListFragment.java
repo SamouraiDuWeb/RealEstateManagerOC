@@ -126,8 +126,8 @@ public class ListFragment extends Fragment implements PropertyListAdapter.OnProp
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (SEARCH_ACTIVITY_REQUEST_CODE == requestCode && Activity.RESULT_OK == resultCode) {
-            List<Property> searchHouseList = (List<Property>) data.getSerializableExtra(BUNDLE_RESULT_LIST);
-            adapter.setData(searchHouseList);
+            List<Property> searchPropertyList = (List<Property>) data.getSerializableExtra(BUNDLE_RESULT_LIST);
+            adapter.setData(searchPropertyList);
         }
     }
 }

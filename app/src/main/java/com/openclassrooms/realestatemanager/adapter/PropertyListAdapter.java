@@ -108,7 +108,8 @@ public class PropertyListAdapter extends RecyclerView.Adapter<PropertyListAdapte
 
             Glide.with(context).load(property.getIllustration()).into(propertyPhoto);
             propertyName.setText(property.getCategory());
-            propertyPrice.setText(String.valueOf((int) property.getPrice()));
+            String price = (int) property.getPrice() + " €";
+            propertyPrice.setText(price);
             propertyAddress.setText(property.getAddress());
         }
 

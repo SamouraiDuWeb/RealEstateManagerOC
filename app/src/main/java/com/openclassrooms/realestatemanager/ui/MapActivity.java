@@ -49,7 +49,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private MapActivityBinding binding;
 
-    public static final String BUNDLE_HOUSE_CLICKED = "BUNDLE_HOUSE_CLICKED";
+    public static final String BUNDLE_PROPERTY_CLICKED = "BUNDLE_PROPERTY_CLICKED";
     private static final long PROPERTY_ID = 1;
     private GoogleMap googleMap;
     private FusedLocationProviderClient client;
@@ -144,7 +144,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         if (id != null) {
             Property property = getPropertyById(id);
             Intent intent = new Intent();
-            intent.putExtra(BUNDLE_HOUSE_CLICKED, property);
+            intent.putExtra(BUNDLE_PROPERTY_CLICKED, property);
             setResult(RESULT_OK, intent);
             finish();
         } else {
