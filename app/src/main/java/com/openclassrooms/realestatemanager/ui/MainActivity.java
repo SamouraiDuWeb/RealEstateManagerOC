@@ -1,7 +1,9 @@
 package com.openclassrooms.realestatemanager.ui;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.Menu;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -62,16 +66,14 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         System.out.println("/// " + Utils.getGoodFormatDate());
-
         configureAndShowListFragment();
         configureAndShowDetailFragment();
 
         setToolbar();
         configureDrawerLayout();
         configureNavigationView();
-        initFirebaseDb();
+//        initFirebaseDb();
     }
-
 
 
     private void configureDrawerLayout() {
@@ -209,9 +211,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public FirebaseDatabase database;
-    public DatabaseReference propertiesRef;
-
     public void initFirebaseDb(){
         Property propertyTest = new Property();
         propertyTest.setDateOfEntry(String.valueOf(System.currentTimeMillis()));
@@ -231,8 +230,8 @@ public class MainActivity extends AppCompatActivity {
         propertyTest.setIllustration("");
         propertyTest.setPublicTransport(true);
 
-        database = FirebaseDatabase.getInstance("https://realestatemanager-372212-default-rtdb.europe-west1.firebasedatabase.app/");
-        propertiesRef = database.getReference("properties");
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://realestatemanager-372212-default-rtdb.europe-west1.firebasedatabase.app/");
+        DatabaseReference propertiesRef = database.getReference("properties");
         String key = propertiesRef.push().getKey();
         propertiesRef.child(key).setValue(propertyTest);
     }

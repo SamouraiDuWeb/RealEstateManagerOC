@@ -6,16 +6,21 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -39,6 +44,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.openclassrooms.realestatemanager.R;
 import com.openclassrooms.realestatemanager.Utils;
 import com.openclassrooms.realestatemanager.adapter.PhotoPropertyAdapter;
@@ -122,6 +129,7 @@ public class AddPropertyActivity extends AppCompatActivity {
         configureViewModel();
         setToolbar();
         initInputs();
+        createNotificationChannel();
 
         Places.initialize(getApplicationContext(), "AIzaSyC3g3Y_iaBGYzzho-dJ-B1D4pA2pKD3PYw");
 
@@ -245,7 +253,12 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setPublicTransport(publicTransport);
                         propertyTest.setIllustration(illustration);
                         realEstateManagerViewModel.createProperty(propertyTest);
+
+                        addToFirebase(propertyTest);
+
                         System.out.println("/// success" + propertyTest);
+                        String propertyTitle = category + " " + surface + "m² " + price + " €";
+                        showNotification(propertyTitle);
                         startActivity(new Intent(AddPropertyActivity.this, MainActivity.class));
                         finish();
                     }
@@ -260,6 +273,13 @@ public class AddPropertyActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void addToFirebase(Property propertyTest) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance("https://realestatemanager-372212-default-rtdb.europe-west1.firebasedatabase.app/");
+        DatabaseReference propertiesRef = database.getReference("properties");
+        String key = propertiesRef.push().getKey();
+        propertiesRef.child(key).setValue(propertyTest);
     }
 
     private void updateProperty(Property property) {
@@ -595,5 +615,27 @@ public class AddPropertyActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "MyApp Notification Channel";
+            String description = "MyApp Notification Channel Description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("MyApp", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showNotification(String propertyTitle) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "MyApp")
+                .setSmallIcon(R.drawable.ic_baseline_home_24)
+                .setContentTitle("New Property Created")
+                .setContentText(propertyTitle)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, builder.build());
     }
 }
