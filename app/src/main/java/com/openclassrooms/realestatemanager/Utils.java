@@ -52,7 +52,7 @@ public class Utils {
     // method to get good format date
     public static String getGoodFormatDate(){
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return dateFormat.format(new Date());
+        return dateFormat.format(System.currentTimeMillis());
     }
 
     /**
