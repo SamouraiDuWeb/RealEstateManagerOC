@@ -7,7 +7,9 @@ An Android mobile application allowing agents to access the cards of various pro
 - Mobile emulator or real device
 
 ## Tech/framework used
-- Android Architecture Component **[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)**, **[LiveData](https://developer.android.com/topic/libraries/architecture/livedata)**
+- **[Android Architecture Component](https://developer.android.com/topic/libraries/architecture/viewmodel)**
+- **[ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)**
+- **[LiveData](https://developer.android.com/topic/libraries/architecture/livedata)**
 - **[Room](https://developer.android.com/topic/libraries/architecture/room)**
 - **[SQLite](https://developer.android.com/training/data-storage/sqlite)**
 - **[Glide](https://bumptech.github.io/glide/)**
