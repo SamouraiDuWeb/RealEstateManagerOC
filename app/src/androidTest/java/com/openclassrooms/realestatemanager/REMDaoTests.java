@@ -89,7 +89,7 @@ public class REMDaoTests {
         propertyAdded.setSurface(130);
         this.database.propertyDao().updateProperty(propertyAdded.getCategory(), propertyAdded.getPrice(), propertyAdded.getSurface(), propertyAdded.getAddress(),
                 propertyAdded.getNbRooms(), propertyAdded.getNbBathrooms(), propertyAdded.getNbBedrooms(), propertyAdded.getDescription(), propertyAdded.getStatus(), propertyAdded.getAgentName(),
-                propertyAdded.isSchool(), propertyAdded.isBusiness(), propertyAdded.isPark(), propertyAdded.isPublicTransport(), propertyAdded.getDateOfEntry(), "");
+                propertyAdded.isSchool(), propertyAdded.isBusiness(), propertyAdded.isPark(), propertyAdded.isPublicTransport(), propertyAdded.getDateOfEntry(), "", PROPERTY_ID);
         //TEST
         Property propertyToTest = LiveDataTestUtil.getValue(this.database.propertyDao().getProperty(PROPERTY_ID));
         assertEquals(130, propertyAdded.getSurface(), 0);

@@ -115,6 +115,7 @@ public class ListFragment extends Fragment implements PropertyListAdapter.OnProp
 //            lblNoProperty.setVisibility(View.GONE);
             rvProperties.setVisibility(View.VISIBLE);
         }
+        // same infos all
     }
 
     @Override

@@ -53,11 +53,11 @@ public class RealEstateManagerViewModel extends ViewModel {
 
     public void updateProperty(String category, float price, float surface, String address,
                                int nbRooms, int nbBathRooms, int nbBedRooms, String description, String status, String agentName,
-                               boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold) {
+                               boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long id) {
         executor.execute(() -> {
             propertyDataSource.updateProperty(category, price, surface, address,
                     nbRooms, nbBathRooms, nbBedRooms, description, status, agentName,
-                    school, business, park, publicTransport, dateOfEntry, dateSold);
+                    school, business, park, publicTransport, dateOfEntry, dateSold, id);
         });
     }
 

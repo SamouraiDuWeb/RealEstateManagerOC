@@ -27,7 +27,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 public class REMContentProviderTests {
 
     //DATA set for test
-    private static final long PROPERTY_ID = 1;
+    private static final long PROPERTY_ID = 21;
     //For DATA
     private ContentResolver contentResolver;
 
@@ -64,6 +64,7 @@ public class REMContentProviderTests {
         assertThat(cursor.moveToFirst(), is(true));
         assertThat(cursor.getString(cursor.getColumnIndexOrThrow("category")), is("Maison"));
         contentResolver.delete(Objects.requireNonNull(propertyUri), null, null);
+        cursor.close();
     }
 
     private ContentValues generateProperty() {
@@ -74,7 +75,7 @@ public class REMContentProviderTests {
         values.put("category", "Maison");
         values.put("address", "25 Allée du Docteur Calmet 93260 Les Lilas");
         values.put("price", "720000");
-        values.put("surface", "450m²");
+        values.put("surface", 450);
         values.put("nbRooms", 2);
         values.put("nbBathrooms", 1);
         values.put("nbBedrooms", 3);

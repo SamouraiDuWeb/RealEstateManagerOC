@@ -17,6 +17,9 @@ public class REMContentProvider extends ContentProvider {
     public static final String AUTHORITY = "com.openclassrooms.realestatemanager.provider";
     public static final String TABLE_NAME = Property.class.getSimpleName();
     public static final Uri URI_PROPERTY = Uri.parse("content://" + AUTHORITY + "/" + TABLE_NAME);
+//    content://com.example.realestate/property
+
+    //réviser content provider
 
     @Override
     public boolean onCreate() {
@@ -85,7 +88,8 @@ public class REMContentProvider extends ContentProvider {
                     contentValues.getAsBoolean("park"),
                     contentValues.getAsBoolean("publicTransport"),
                     contentValues.getAsString("dateOfEntry"),
-                    contentValues.getAsString("dateSold"));
+                    contentValues.getAsString("dateSold"),
+                    contentValues.getAsLong("id"));
             getContext().getContentResolver().notifyChange(uri, null);
             return count;
         }

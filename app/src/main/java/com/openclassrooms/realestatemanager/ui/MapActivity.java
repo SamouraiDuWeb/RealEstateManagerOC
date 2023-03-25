@@ -92,6 +92,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private void getAllPropertyFromDatabase() {
         this.realEstateManagerViewModel.getAll().observe(this, this::updateList);
+        // does not get all the properties
     }
 
     private void updateList(List<Property> properties) {

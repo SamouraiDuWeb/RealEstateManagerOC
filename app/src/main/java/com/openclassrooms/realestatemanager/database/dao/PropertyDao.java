@@ -39,11 +39,11 @@ public interface PropertyDao {
             "park = :park," +
             "publicTransport = :publicTransport," +
             "dateOfEntry = :dateOfEntry," +
-            "dateSold = :dateSold"
+            "dateSold = :dateSold WHERE id = :propertyId"
             )
     int updateProperty(String category, float price, float surface, String address,
                        int nbRooms, int nbBathRooms, int nbBedRooms, String description, String status, String agentName,
-                       boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold);
+                       boolean school, boolean business, boolean park, boolean publicTransport, String dateOfEntry, String dateSold, long propertyId);
 
     @Query("UPDATE PropertyPhotos SET photoUrl = :photos WHERE photosId =:id")
     int updateGallery(List<String> photos, long id);

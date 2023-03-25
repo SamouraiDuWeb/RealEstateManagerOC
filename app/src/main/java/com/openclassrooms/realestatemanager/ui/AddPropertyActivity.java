@@ -293,7 +293,7 @@ public class AddPropertyActivity extends AppCompatActivity {
 
         realEstateManagerViewModel.updateProperty(category, price,surface, address,
                 nbRooms, nbBathRooms, nbBedRooms, description, status, "Leoo",
-                school, business, park, publicTransport, dateOfEntry, dateSold);
+                school, business, park, publicTransport, dateOfEntry, dateSold, id);
     }
 
     private void addPhotos(long propertyId) {
@@ -305,6 +305,7 @@ public class AddPropertyActivity extends AppCompatActivity {
             photoToAddToDb.setPhotoUrl(galleryToShow.get(i).getPhotoUrl());
             photoToAddToDb.setPhotoDescription(galleryToShow.get(i).getPhotoDescription());
             realEstateManagerViewModel.createPropertyPhoto(photoToAddToDb);
+            // on modify does not show images
         }
     }
 
