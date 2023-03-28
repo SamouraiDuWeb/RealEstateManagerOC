@@ -3,10 +3,12 @@ package com.openclassrooms.realestatemanager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import androidx.room.Room;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.runner.AndroidJUnit4;
 
@@ -22,6 +24,7 @@ import java.util.Objects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(AndroidJUnit4.class)
 public class REMContentProviderTests {
@@ -89,5 +92,12 @@ public class REMContentProviderTests {
         values.put("dateOfEntry", Utils.getGoodFormatDate());
 
         return values;
+    }
+
+    Context context = ApplicationProvider.getApplicationContext();
+
+    @Test
+    public void testInternetAvailability() {
+        assertTrue("ok", Utils.isInternetAvailable(context));
     }
 }

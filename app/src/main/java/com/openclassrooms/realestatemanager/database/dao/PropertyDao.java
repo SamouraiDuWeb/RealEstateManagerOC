@@ -7,8 +7,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 
 import java.util.List;
 
@@ -59,11 +61,25 @@ public interface PropertyDao {
 
 @Query("SELECT * FROM Property WHERE " +
             " price BETWEEN :miniPrice AND :maxiPrice " +
-            " AND surface BETWEEN :miniSurface AND :maxiSurface" +
-            " AND nbRooms BETWEEN :miniRoom AND :maxiRoom" +
-            " AND school LIKE :school" +
-            " AND business LIKE :business" +
-            " AND publicTransport LIKE :publicTransport" +
-            " AND park LIKE :park")
+            " OR surface BETWEEN :miniSurface AND :maxiSurface" +
+            " OR nbRooms BETWEEN :miniRoom AND :maxiRoom" +
+            " OR school LIKE :school" +
+            " OR business LIKE :business" +
+            " OR publicTransport LIKE :publicTransport" +
+            " OR park LIKE :park")
 LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertPhotos(List<PropertyPhotos> photos);
+
+    @Transaction
+    default void insertPropertyAndPhotos(Property property, List<PropertyPhotos> photos) {
+        long propertyId = createProperty(property);
+        for (PropertyPhotos photo : photos) {
+            photo.setPropertyId(propertyId);
+        }
+        insertPhotos(photos);
+    }
+
+
 }

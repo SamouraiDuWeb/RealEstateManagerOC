@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Property;
+import com.openclassrooms.realestatemanager.models.PropertyPhotos;
 
 import java.util.List;
 
@@ -16,8 +17,8 @@ public class PropertyDataRepository {
     }
 
     //Create property
-    public void createProperty(Property property) {
-        propertyDao.createProperty(property);
+    public long createProperty(Property property) {
+        return propertyDao.createProperty(property);
     }
 
     //Create property
@@ -68,5 +69,13 @@ public class PropertyDataRepository {
                 business,
                 publicTransport,
                 park);
+    }
+
+    public void insertPropertyAndPhotos(Property property, List<PropertyPhotos> photos) {
+        long propertyId = createProperty(property);
+        for (PropertyPhotos photo : photos) {
+            photo.setPropertyId(propertyId);
+        }
+        propertyDao.insertPhotos(photos);
     }
 }

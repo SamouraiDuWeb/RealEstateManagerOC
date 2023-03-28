@@ -41,11 +41,8 @@ public class PhotoPropertyAdapter extends  RecyclerView.Adapter<PhotoPropertyAda
         TextView tvdescription = view.findViewById(R.id.tv_add_photo_description);
         String className = context.getClass().getSimpleName();
         System.out.println("/// context " + context.getClass().getSimpleName());
-        if (className.equals("DetailFragment")) {
+        if (className.equals("MainActivity")) {
             ivDelete.setVisibility(View.GONE);
-        }
-        if (className.equals("AddPropertyActivity")) {
-            tvdescription.setVisibility(View.GONE);
         }
         return new ViewHolder(view);
     }

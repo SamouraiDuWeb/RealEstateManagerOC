@@ -119,6 +119,8 @@ public class AddPropertyActivity extends AppCompatActivity {
     private String illustration;
     private ImageView ivIllustration;
 
+    private long newId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,8 +141,8 @@ public class AddPropertyActivity extends AppCompatActivity {
             propertyToEdit = (Property) extras.get("current_property");
         }
         if (id == -1 || id == 0) {
-            binding.btnAddActivityAddPhoto.setVisibility(View.GONE);
-            binding.rvGallery.setVisibility(View.GONE);
+//            binding.btnAddActivityAddPhoto.setVisibility(View.GONE);
+//            binding.rvGallery.setVisibility(View.GONE);
             binding.tvStatus.setVisibility(View.GONE);
             binding.cbStatus.setVisibility(View.GONE);
         } else {
@@ -252,10 +254,8 @@ public class AddPropertyActivity extends AppCompatActivity {
                         propertyTest.setIllustration(illustration);
                         propertyTest.setPublicTransport(publicTransport);
                         propertyTest.setIllustration(illustration);
-                        realEstateManagerViewModel.createProperty(propertyTest);
-
                         addToFirebase(propertyTest);
-
+                        insertPropertyAndPhotos(newId);
                         System.out.println("/// success" + propertyTest);
                         String propertyTitle = category + " " + surface + "m² " + price + " €";
                         showNotification(propertyTitle);
@@ -296,14 +296,31 @@ public class AddPropertyActivity extends AppCompatActivity {
                 school, business, park, publicTransport, dateOfEntry, dateSold, id);
     }
 
+    private void insertPropertyAndPhotos(long propertyId) {
+        PropertyPhotos photoToAddToDb;
+        System.out.println("/// " + galleryToShow.size());
+        List<PropertyPhotos> photos = new ArrayList<>();
+        for (int i = 0; i < galleryToShow.size(); i++) {
+            photoToAddToDb = galleryToShow.get(i);
+            photoToAddToDb.setPhotoUrl(galleryToShow.get(i).getPhotoUrl());
+            photoToAddToDb.setPhotoDescription(galleryToShow.get(i).getPhotoDescription());
+            photos.add(photoToAddToDb);
+//            realEstateManagerViewModel.createPropertyPhoto(photoToAddToDb);
+            // on modify does not show images
+        }
+        realEstateManagerViewModel.insertPropertyAndPhotos(propertyTest, photos);
+    }
+
     private void addPhotos(long propertyId) {
         PropertyPhotos photoToAddToDb;
         System.out.println("/// " + galleryToShow.size());
+        List<PropertyPhotos> photos = new ArrayList<>();
         for (int i = 0; i < galleryToShow.size(); i++) {
             photoToAddToDb = galleryToShow.get(i);
             photoToAddToDb.setPropertyId(propertyId);
             photoToAddToDb.setPhotoUrl(galleryToShow.get(i).getPhotoUrl());
             photoToAddToDb.setPhotoDescription(galleryToShow.get(i).getPhotoDescription());
+            photos.add(photoToAddToDb);
             realEstateManagerViewModel.createPropertyPhoto(photoToAddToDb);
             // on modify does not show images
         }

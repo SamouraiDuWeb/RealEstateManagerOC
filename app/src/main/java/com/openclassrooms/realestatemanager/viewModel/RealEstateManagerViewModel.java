@@ -12,6 +12,7 @@ import com.openclassrooms.realestatemanager.viewModel.repositories.UserDataRepos
 
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class RealEstateManagerViewModel extends ViewModel {
 
@@ -39,10 +40,12 @@ public class RealEstateManagerViewModel extends ViewModel {
     }
 
     //For property
-    public void createProperty(Property property) {
+    public long createProperty(Property property) {
+        AtomicLong id = new AtomicLong();
         executor.execute(() -> {
-            propertyDataSource.createProperty(property);
+           id.set(propertyDataSource.createProperty(property));
         });
+        return id.get();
     }
 
     public void deleteAllProperties() {
@@ -126,5 +129,13 @@ public class RealEstateManagerViewModel extends ViewModel {
                     business,
                     publicTransport,
                     park);
+    }
+
+    public void insertPropertyAndPhotos(Property property, List<PropertyPhotos> photos) {
+        long propertyId = property.getId();
+        for (PropertyPhotos photo : photos) {
+            photo.setPropertyId(propertyId);
+        }
+        propertyDataSource.insertPropertyAndPhotos(property, photos);
     }
 }
