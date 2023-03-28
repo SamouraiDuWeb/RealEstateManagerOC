@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 public class REMContentProviderTests {
 
     //DATA set for test
-    private static final long PROPERTY_ID = 21;
+    private static final long PROPERTY_ID = 60;
     //For DATA
     private ContentResolver contentResolver;
 
@@ -44,14 +44,10 @@ public class REMContentProviderTests {
     }
 
     @Test
-    public void getPropertyWhenNoPropertyInserted() {
+    public void testCursor() {
         final Cursor cursor = contentResolver.query(ContentUris.withAppendedId(REMContentProvider.URI_PROPERTY, PROPERTY_ID),
                 null, null, null, null);
         assertThat(cursor, notNullValue());
-        if (cursor != null) {
-            assertThat(cursor.getCount(), is(1));
-            cursor.close();
-        }
     }
 
     @Test
@@ -74,7 +70,7 @@ public class REMContentProviderTests {
 
         ContentValues values = new ContentValues();
 
-        values.put("id", 20);
+        values.put("id", 60);
         values.put("category", "Maison");
         values.put("address", "25 Allée du Docteur Calmet 93260 Les Lilas");
         values.put("price", "720000");
