@@ -87,7 +87,11 @@ public class SearchActivity extends AppCompatActivity  {
         if(!String.valueOf(etMinsurface.getText()).equals("") && !String.valueOf(etMaxSurface.getText()).equals("")) {
             miniSurface = Integer.parseInt(String.valueOf(etMinsurface.getText()));
             maxiSurface = Integer.parseInt(String.valueOf(etMaxSurface.getText()));
-            queryString += " AND";
+            if(containsCondition) {
+                queryString += " AND";
+            } else {
+                queryString += " WHERE";
+            }
             queryString += " surface BETWEEN ? AND ?";
             args.add(miniSurface);
             args.add(maxiSurface);
@@ -97,10 +101,54 @@ public class SearchActivity extends AppCompatActivity  {
         if(!String.valueOf(etMinNbRooms.getText()).equals("") && !String.valueOf(etMaxNbRooms.getText()).equals("")) {
             miniRoom = Integer.parseInt(String.valueOf(etMinNbRooms.getText()));
             maxiRoom = Integer.parseInt(String.valueOf(etMaxNbRooms.getText()));
-            queryString += " AND";
+            if(containsCondition) {
+                queryString += " AND";
+            } else {
+                queryString += " WHERE";
+            }
             queryString += " nbRooms BETWEEN ? AND ?";
             args.add(miniRoom);
             args.add(maxiRoom);
+            containsCondition = true;
+        }
+
+        if(cbSchool.isChecked()) {
+            school = true;
+            if(containsCondition) {
+                queryString += " AND";
+            }
+            queryString += " WHERE school = ?";
+            args.add(school);
+            containsCondition = true;
+        }
+
+        if(cbCommerce.isChecked()) {
+            business = true;
+            if(containsCondition) {
+                queryString += " AND";
+            }
+            queryString += " WHERE business = ?";
+            args.add(business);
+            containsCondition = true;
+        }
+
+        if(cbTransports.isChecked()) {
+            publicTransport = true;
+            if(containsCondition) {
+                queryString += " AND";
+            }
+            queryString += " WHERE publicTransport = ?";
+            args.add(publicTransport);
+            containsCondition = true;
+        }
+
+        if(cbParks.isChecked()) {
+            park = true;
+            if(containsCondition) {
+                queryString += " AND";
+            }
+            queryString += " WHERE park = ?";
+            args.add(park);
             containsCondition = true;
         }
 
@@ -132,6 +180,10 @@ public class SearchActivity extends AppCompatActivity  {
         etMaxSurface = binding.etSearchActivityMaxiArea;
         etMinNbRooms = binding.etSearchActivityMiniRoom;
         etMaxNbRooms = binding.etSearchActivityMaxiRoom;
+        cbSchool = binding.cbSearchActivitySchool;
+        cbCommerce = binding.cbSearchActivityShopping;
+        cbParks = binding.cbSearchActivityParks;
+        cbTransports = binding.cbSearchActivityPublicTransport;
         btnFilter = binding.btSearchActivityFilter;
     }
 
