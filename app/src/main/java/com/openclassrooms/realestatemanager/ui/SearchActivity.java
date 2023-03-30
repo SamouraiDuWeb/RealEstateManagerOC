@@ -12,7 +12,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
+import com.openclassrooms.realestatemanager.database.RealEstateManagerDatabase;
+import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.databinding.SearchActivityBinding;
 import com.openclassrooms.realestatemanager.injection.Injection;
 import com.openclassrooms.realestatemanager.injection.ViewModelFactory;
@@ -20,6 +23,7 @@ import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.viewModel.RealEstateManagerViewModel;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchActivity extends AppCompatActivity  {
@@ -29,12 +33,11 @@ public class SearchActivity extends AppCompatActivity  {
     private SearchActivityBinding binding;
     private RealEstateManagerViewModel realEstateManagerViewModel;
 
-    private EditText etCp, etMinPrice, etMaxPrice, etMinsurface, etMaxSurface, etMinNbRooms, etMaxNbRooms, etMinPhotos, etMaxPhotos;
-    private CheckBox cbSchool, cbCommerce, cbTransports, cbParks, cbSold;
+    private EditText etMinPrice, etMaxPrice, etMinsurface, etMaxSurface, etMinNbRooms, etMaxNbRooms;
+    private CheckBox cbSchool, cbCommerce, cbTransports, cbParks;
     private Button btnFilter;
 
     //For Data
-    private String zipCode;
     private int miniPrice;
     private int maxiPrice;
     private boolean school;
@@ -58,26 +61,62 @@ public class SearchActivity extends AppCompatActivity  {
     }
 
     public void onClick(View view) {
-        getInputs();
-        if (checkInput()) {
-            realEstateManagerViewModel.getSearchedProperty(
-                    miniPrice,
-                    maxiPrice,
-                    miniSurface,
-                    maxiSurface,
-                    miniRoom,
-                    maxiRoom,
-                    school,
-                    business,
-                    publicTransport,
-                    park
-            ).observe(this, this::getSearchedList);
+        launchQuery();
+    }
+
+    private void launchQuery() {
+
+        String queryString = "";
+
+        List<Object> args = new ArrayList<>();
+
+        boolean containsCondition = false;
+
+        queryString += "SELECT * FROM Property";
+
+        if(!String.valueOf(etMinPrice.getText()).equals("") && !String.valueOf(etMaxPrice.getText()).equals("")) {
+            miniPrice = Integer.parseInt(String.valueOf(etMinPrice.getText()));
+            maxiPrice = Integer.parseInt(String.valueOf(etMaxPrice.getText()));
+            queryString += " WHERE";
+            queryString += " price BETWEEN ? AND ?";
+            args.add(miniPrice);
+            args.add(maxiPrice);
+            containsCondition = true;
         }
+
+        if(!String.valueOf(etMinsurface.getText()).equals("") && !String.valueOf(etMaxSurface.getText()).equals("")) {
+            miniSurface = Integer.parseInt(String.valueOf(etMinsurface.getText()));
+            maxiSurface = Integer.parseInt(String.valueOf(etMaxSurface.getText()));
+            queryString += " AND";
+            queryString += " surface BETWEEN ? AND ?";
+            args.add(miniSurface);
+            args.add(maxiSurface);
+            containsCondition = true;
+        }
+
+        if(!String.valueOf(etMinNbRooms.getText()).equals("") && !String.valueOf(etMaxNbRooms.getText()).equals("")) {
+            miniRoom = Integer.parseInt(String.valueOf(etMinNbRooms.getText()));
+            maxiRoom = Integer.parseInt(String.valueOf(etMaxNbRooms.getText()));
+            queryString += " AND";
+            queryString += " nbRooms BETWEEN ? AND ?";
+            args.add(miniRoom);
+            args.add(maxiRoom);
+            containsCondition = true;
+        }
+
+        queryString += ";";
+
+        System.out.println("/// " + queryString);
+
+        SimpleSQLiteQuery query = new SimpleSQLiteQuery(queryString, args.toArray());
+        List<Property> properties = RealEstateManagerDatabase.getINSTANCE(this).propertyDao().getSearchedProperty(query);
+        getSearchedList(properties);
     }
 
     public void getSearchedList(List<Property> properties) {
         if (properties.isEmpty()) {
             Toast.makeText(this, "Aucun bien ne correspond", Toast.LENGTH_LONG).show();
+            System.out.println("/// " + properties);
         } else {
             Intent intent = new Intent();
             intent.putExtra(BUNDLE_RESULT_LIST, (Serializable) properties);
@@ -86,60 +125,13 @@ public class SearchActivity extends AppCompatActivity  {
         }
     }
 
-    private boolean checkInput() {
-        Boolean isOk;
-
-        if (miniPrice == 0) {
-            Toast.makeText(this, "Saisir le prix minimum du bien", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else if (maxiPrice == 0) {
-            Toast.makeText(this, "Saisir le prix maximum du bien", Toast.LENGTH_LONG).show();
-            isOk = false;
-        } else {
-            isOk = true;
-        }
-        //TODO : ici ajouter les verifications
-        return isOk;
-    }
-
-    private void getInputs() {
-        String miniPriceInput = etMinPrice.getText().toString();
-        String maxiPriceInput = etMaxPrice.getText().toString();
-        String miniSurfaceInput = etMinsurface.getText().toString();
-        String maxiSurfaceInput = etMaxSurface.getText().toString();
-        String miniRoomInput = etMinNbRooms.getText().toString();
-        String maxiRoomInput = etMaxNbRooms.getText().toString();
-
-        if (!TextUtils.isEmpty(miniPriceInput)) {
-            miniPrice = Integer.parseInt(miniPriceInput);
-        }
-        if (!TextUtils.isEmpty(maxiPriceInput)) {
-            maxiPrice = Integer.parseInt(maxiPriceInput);
-        }
-        if (!TextUtils.isEmpty(miniSurfaceInput)) {
-            miniSurface = Integer.parseInt(miniSurfaceInput);
-        }
-        if (!TextUtils.isEmpty(maxiSurfaceInput)) {
-            maxiSurface = Integer.parseInt(maxiSurfaceInput);
-        }
-
-        if (!TextUtils.isEmpty(miniRoomInput)) {
-            miniRoom = Integer.parseInt(miniRoomInput);
-        }
-        if (!TextUtils.isEmpty(maxiRoomInput)) {
-            maxiRoom = Integer.parseInt(maxiRoomInput);
-        }
-    }
-
     private void initView() {
-        etCp = binding.etSearchActivityDistrict;
         etMinPrice = binding.etSearchActivityPriceMini;
         etMaxPrice = binding.etSearchActivityPriceMax;
         etMinsurface = binding.etSearchActivityMiniArea;
         etMaxSurface = binding.etSearchActivityMaxiArea;
         etMinNbRooms = binding.etSearchActivityMiniRoom;
         etMaxNbRooms = binding.etSearchActivityMaxiRoom;
-        etMinPhotos = binding.etNbPhotos;
         btnFilter = binding.btSearchActivityFilter;
     }
 

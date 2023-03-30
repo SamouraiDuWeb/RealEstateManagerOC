@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.viewModel.repositories;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.database.dao.PropertyDao;
 import com.openclassrooms.realestatemanager.models.Property;
@@ -56,20 +57,6 @@ public class PropertyDataRepository {
         propertyDao.deleteProperty(propertyId);
     }
 
-    public LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park) {
-
-        return propertyDao.getSearchedProperty(
-                miniPrice,
-                maxiPrice,
-                miniSurface,
-                maxiSurface,
-                miniRoom,
-                maxiRoom,
-                school,
-                business,
-                publicTransport,
-                park);
-    }
 
     public void insertPropertyAndPhotos(Property property, List<PropertyPhotos> photos) {
         long propertyId = createProperty(property);

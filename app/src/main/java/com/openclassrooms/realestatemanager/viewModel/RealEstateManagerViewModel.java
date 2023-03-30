@@ -107,30 +107,6 @@ public class RealEstateManagerViewModel extends ViewModel {
         });
     }
 
-    public LiveData<List<Property>> getSearchedProperty(
-                                                        int miniPrice,
-                                                        int maxiPrice,
-                                                        int miniSurface,
-                                                        int maxiSurface,
-                                                        int miniRoom,
-                                                        int maxiRoom,
-                                                        boolean school,
-                                                        boolean business,
-                                                        boolean publicTransport,
-                                                        boolean park) {
-        return propertyDataSource.getSearchedProperty(
-                    miniPrice,
-                    maxiPrice,
-                    miniSurface,
-                    maxiSurface,
-                    miniRoom,
-                    maxiRoom,
-                    school,
-                    business,
-                    publicTransport,
-                    park);
-    }
-
     public void insertPropertyAndPhotos(Property property, List<PropertyPhotos> photos) {
         long propertyId = property.getId();
         for (PropertyPhotos photo : photos) {

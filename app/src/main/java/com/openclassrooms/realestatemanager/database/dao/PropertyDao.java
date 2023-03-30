@@ -7,7 +7,9 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.RawQuery;
 import androidx.room.Transaction;
+import androidx.sqlite.db.SupportSQLiteQuery;
 
 import com.openclassrooms.realestatemanager.models.Property;
 import com.openclassrooms.realestatemanager.models.PropertyPhotos;
@@ -59,15 +61,18 @@ public interface PropertyDao {
     @Query("DELETE FROM Property WHERE id = :propertyId")
     int deleteProperty(long propertyId);
 
-@Query("SELECT * FROM Property WHERE " +
-            " price BETWEEN :miniPrice AND :maxiPrice " +
-            " OR surface BETWEEN :miniSurface AND :maxiSurface" +
-            " OR nbRooms BETWEEN :miniRoom AND :maxiRoom" +
-            " OR school LIKE :school" +
-            " OR business LIKE :business" +
-            " OR publicTransport LIKE :publicTransport" +
-            " OR park LIKE :park")
-LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park);
+//@Query("SELECT * FROM Property WHERE " +
+//            " price BETWEEN :miniPrice AND :maxiPrice " +
+//            " OR surface BETWEEN :miniSurface AND :maxiSurface" +
+//            " OR nbRooms BETWEEN :miniRoom AND :maxiRoom" +
+//            " OR school LIKE :school" +
+//            " OR business LIKE :business" +
+//            " OR publicTransport LIKE :publicTransport" +
+//            " OR park LIKE :park")
+//LiveData<List<Property>> getSearchedProperty(int miniPrice, int maxiPrice, int miniSurface, int maxiSurface, int miniRoom, int maxiRoom, boolean school, boolean business, boolean publicTransport, boolean park);
+
+    @RawQuery
+    List<Property> getSearchedProperty(SupportSQLiteQuery query);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPhotos(List<PropertyPhotos> photos);
